@@ -7,7 +7,7 @@ from modules.order_text_parser import load_order_text
 from modules.order_parser import load_order_excel
 from modules.order_exporter import save_order_list_excel
 from datetime import datetime
-import traceback
+
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
@@ -38,7 +38,7 @@ def analyze():
             if not order.filename.lower().endswith(ALLOWED_EXTENSIONS):
                 raise SellerOSError("EH001")
 
-            order_name = order.filename
+            order_name = secure_filename(order.filename)
 
             order_path = os.path.join(
                 "uploads",
@@ -47,16 +47,7 @@ def analyze():
             )
 
             order.save(order_path)
-
-            print("===== 주문파일 저장 =====")
-            print("원본파일명 :", order.filename)
-            print("저장파일명 :", order_name)
-            print("저장경로 :", order_path)
-            print("파일존재 :", os.path.exists(order_path))
-
-            if os.path.exists(order_path):
-                print("파일크기 :", os.path.getsize(order_path))
-
+                    
             orders = load_order_excel(order_path)
       
 
@@ -143,8 +134,13 @@ def analyze():
 
     except Exception as e:
 
-        return f"<pre>{traceback.format_exc()}</pre>"
+        print(e)
 
+        return render_template(
+            "error.html",
+            code="EH999",
+            message="프로그램 처리 중 오류가 발생했습니다."
+    )
 
 @app.route("/download/result")
 def download_result():

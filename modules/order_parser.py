@@ -1,6 +1,5 @@
 import re
 import pandas as pd
-import shutil
 from modules.error_handler import SellerOSError
 
 
@@ -19,18 +18,15 @@ REQUIRED_COLUMNS = [
 
 def clean_columns(df):
 
-    print("===== 원본 컬럼 =====")
-    print(df.columns.tolist())
-
-    df.columns = [
-        str(col).replace("\n", "").replace("(*)", "").strip()
-        for col in df.columns
-    ]
-
-    print("===== 정리 후 컬럼 =====")
-    print(df.columns.tolist())
+    df.columns = (
+        df.columns
+        .str.replace("\n", "", regex=False)
+        .str.replace("(*)", "", regex=False)
+        .str.strip()
+    )
 
     return df
+
 
 
 def load_order_excel(file_path):
@@ -43,15 +39,13 @@ def load_order_excel(file_path):
 
         df = pd.read_excel(
         file_path,
-        header=None,
         dtype=str
     )
 
  
     except Exception as e:
 
-        print(e)
-        raise
+      raise SellerOSError("EH006")
 
     # -------------------------
     # 빈 파일 검사
@@ -77,11 +71,7 @@ def load_order_excel(file_path):
 
         if column not in df.columns:
 
-            raise Exception(
-                f"EH004\n"
-                f"찾는 컬럼 : {column}\n"
-                f"실제 컬럼 : {list(df.columns)}"
-        )
+            raise SellerOSError("EH004")
     # -------------------------
     # NaN 제거
     # -------------------------
