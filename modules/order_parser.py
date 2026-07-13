@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+
 from modules.error_handler import SellerOSError
 
 
@@ -20,13 +21,13 @@ def clean_columns(df):
 
     df.columns = (
         df.columns
+        .astype(str)
         .str.replace("\n", "", regex=False)
         .str.replace("(*)", "", regex=False)
         .str.strip()
     )
 
     return df
-
 
 
 def load_order_excel(file_path):
@@ -38,14 +39,13 @@ def load_order_excel(file_path):
     try:
 
         df = pd.read_excel(
-        file_path,
-        dtype=str
-    )
+            file_path,
+            dtype=str
+        )
 
- 
-    except Exception as e:
+    except Exception:
 
-      raise SellerOSError("EH006")
+        raise SellerOSError("EH006")
 
     # -------------------------
     # 빈 파일 검사
@@ -61,8 +61,6 @@ def load_order_excel(file_path):
 
     df = clean_columns(df)
 
-    print("컬럼명:", list(df.columns))
-
     # -------------------------
     # 필수 컬럼 검사
     # -------------------------
@@ -72,6 +70,7 @@ def load_order_excel(file_path):
         if column not in df.columns:
 
             raise SellerOSError("EH004")
+
     # -------------------------
     # NaN 제거
     # -------------------------
@@ -86,7 +85,7 @@ def load_order_excel(file_path):
 
     for _, row in df.iterrows():
 
-        nickname_depositor = row["유튜브 닉네임 및 성함"].strip()
+        nickname_depositor = str(row["유튜브 닉네임 및 성함"]).strip()
 
         if "," in nickname_depositor:
 
@@ -97,17 +96,11 @@ def load_order_excel(file_path):
             nickname = nickname_depositor
             depositor = ""
 
-        # -------------------------
-        # 데이터 정규화
-        # -------------------------
-
         nickname = nickname.strip()
 
-        # 입금자명 공백 제거
         depositor = "".join(depositor.split())
 
-        # 전화번호 숫자만 저장
-        phone = re.sub(r"\D", "", row["연락처"].strip())
+        phone = re.sub(r"\D", "", str(row["연락처"]).strip())
 
         order = {
 
@@ -115,11 +108,11 @@ def load_order_excel(file_path):
 
             "depositor": depositor,
 
-            "product": row["구매한 제품 작성."].strip(),
+            "product": str(row["구매한 제품 작성."]).strip(),
 
             "phone": phone,
 
-            "address": row["배송받을 주소"].strip()
+            "address": str(row["배송받을 주소"]).strip()
 
         }
 
