@@ -172,6 +172,8 @@ def validate_results(matched, unmatched, no_order):
 
             x["nickname"],
 
+            x["product"],
+
             x["depositor"]
 
         )

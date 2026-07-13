@@ -65,7 +65,7 @@ def analyze():
         # -------------------------
         if not bank or bank.filename == "":
 
-            filename = datetime.now().strftime("%m%d_%H%M%S_주문목록.xlsx")
+            filename = datetime.now().strftime("%Y%m%d_%H%M%S_주문목록.xlsx")
 
             output_file = os.path.join(
               "output",

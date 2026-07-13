@@ -96,7 +96,7 @@ def load_order_excel(file_path):
             nickname = nickname_depositor
             depositor = ""
 
-        nickname = nickname.strip()
+        nickname = "".join(nickname.split())
 
         depositor = "".join(depositor.split())
 

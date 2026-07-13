@@ -61,6 +61,9 @@ def load_order_text(text):
 
                 value = re.sub(r"\D", "", value)
 
+            if field in ("nickname", "depositor"):
+                value = "".join(value.split())    
+
             order[field] = value
 
     if order:
