@@ -143,13 +143,7 @@ def analyze():
 
     except Exception as e:
 
-        traceback.print_exc()
-        raise
-        return render_template(
-            "error.html",
-            code="EH999",
-            message=str(e)
-        )
+        return f"<pre>{traceback.format_exc()}</pre>"
 
 
 @app.route("/download/result")
