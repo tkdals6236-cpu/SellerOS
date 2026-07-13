@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SellerOS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>📦 SellerOS</h1>
+    
+        <p class="subtitle">
+    
+            라이브 셀러 자동 검수 시스템
+    
+        </p>
+    
+    </div>
+
+    <form action="/analyze" method="post" enctype="multipart/form-data">
+
+        <!-- 업로드 영역 -->
+        <div class="upload-grid">
+
+            <!-- 왼쪽 -->
+            <div class="left-panel">
+
+                <div class="card upload-card" id="orderDrop">
+
+                    <h3>📄 주문정보</h3>
+                
+                    <div class="upload-icon">
+                        ⬆
+                    </div>
+                
+                    <p class="drop-guide">
+                
+                        파일을 드래그하거나 클릭하여 업로드
+                
+                    </p>
+                
+                    <p class="file-type">
+                
+                        엑셀 파일 (.xlsx, .xls)
+                
+                    </p>
+                
+                    <input
+                        type="file"
+                        id="order_file"
+                        name="order_file"
+                        accept=".xlsx,.xls"
+                        hidden>
+                
+                    <button type="button" class="upload-btn">
+                
+                        📁 파일 선택
+                
+                    </button>
+                
+                    <p id="order-name"></p>
+                
+                </div>
+
+                <div class="card">
+
+                    <details>
+
+                        <summary>
+
+                            📝 주문내용 직접 입력 <span class="optional">(선택)</span>
+                        
+                        </summary>
+                        
+                        <p class="paste-guide">
+                        
+                            카카오톡, 문자, 메모장의 주문 내용을 그대로 붙여넣으세요.
+                                                           
+                        </p>
+
+                        <br>
+
+                        <textarea
+                            id="order_text"
+                            name="order_text"
+                            rows="12"
+                            placeholder="예)
+                            닉네임 : 홍길동
+                            성함 : 깅철수
+                            연락처 : 01012345678
+                            주소 : 경기도...
+                            상품 : 의류
+                            
+                            Ctrl + V 로 붙여넣으세요."></textarea>
+
+                    </details>
+
+                </div>
+
+            </div>
+
+            <!-- 오른쪽 -->
+            <div class="right-panel">
+
+                <div class="card upload-card" id="bankDrop">
+
+                    <h3>💳 입금내역</h3>
+
+                    <div class="upload-icon">
+                        ⬆
+                     </div>
+
+                    <p class="drop-guide">
+                        파일을 드래그하거나 클릭하여 업로드
+                    </p>
+
+                    <p class="file-type">
+
+                        엑셀 파일 (.xlsx, .xls)
+                
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="bank_file"
+                        name="bank_file"
+                        accept=".xlsx,.xls"
+                        hidden>
+                    
+
+                        <button type="button" class="upload-btn">
+                            📁 파일 선택
+                        </button>
+
+                    <p id="bank-name"></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 분석 -->
+        <button id="analyzeBtn" class="analyze-btn" type="submit" disabled>
+
+            주문정보와 입금내역을 입력하세요
+
+        </button>
+
+        <p class="guide">
+
+            ※ 주문파일 또는 주문내용을 입력한 후 입금내역을 선택하면 분석을 시작할 수 있습니다.
+
+        </p>
+
+    </form>
+
+    <p class="version">
+
+        SellerOS v0.4
+
+    </p>
+
+</div>
+
+<!-- Loading -->
+<div id="loadingOverlay">
+
+    <div class="loading-box">
+
+        <div class="spinner"></div>
+
+        <h2>분석 중입니다...</h2>
+
+        <p>잠시만 기다려주세요.</p>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SellerOS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>SellerOS</h1>
+
+    <p class="subtitle">
+        라이브 셀러 자동 검수 시스템
+    </p>
+
+    <form action="/analyze" method="post" enctype="multipart/form-data">
+
+        <div class="upload-grid">
+
+           <div class="card upload-card" id="orderDrop">
+
+            <h3>📄 주문정보</h3>
+        
+            <p>여기로 파일을 드래그하거나 클릭하세요.</p>
+        
+            <input type="file"
+                   accept=".xlsx,.xls"
+                   id="order_file"
+                   name="order_file"
+                   accept=".xlsx,.xls"
+                   hidden
+                   required>
+        
+            <p id="order-name"></p>
+        
+        </div>
+           </div>
+
+
+        <div class="card">
+
+            <h3>💬 주문 붙여넣기</h3>
+        
+            <textarea
+                id="order_text"
+                name="order_text"
+                rows="12"
+                placeholder="카카오톡, 문자 등의 주문 내용을 그대로 붙여넣으세요."></textarea>
+        
+        </div>
+
+        <div class="card upload-card" id="bankDrop">
+
+            <h3>💳 입금내역</h3>
+        
+            <p>여기로 파일을 드래그하거나 클릭하세요.</p>
+        
+            <input type="file"
+                   id="bank_file"
+                   name="bank_file"
+                   accept=".xlsx,.xls"
+                   hidden
+                   required>
+        
+            <p id="bank-name"></p>
+        
+        </div>
+
+            <h3>🚚 택배사</h3>
+
+            <label>
+                <input type="radio" checked>
+                로젠택배
+            </label>
+
+        </div>
+
+        <button id="analyzeBtn" class="analyze-btn" type="submit" disabled>
+
+            주문폼과 입금내역을 선택하세요
+
+        </button>
+
+        <p class="guide">
+
+            ※ 주문폼과 입금내역을 모두 선택하면 분석을 시작할 수 있습니다.
+            
+            </p>
+
+    </form>
+
+    <p class="version">
+
+        SellerOS v0.1.0
+
+    </p>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<div id="loadingOverlay">
+
+    <div class="loading-box">
+
+        <div class="spinner"></div>
+
+        <h2>분석 중입니다...</h2>
+
+        <p>잠시만 기다려주세요.</p>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</body>
+
+</html>

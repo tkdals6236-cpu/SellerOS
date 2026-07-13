@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SellerOS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>✅ 검수 완료</h1>
+
+        <p class="subtitle">
+
+            주문 검수가 정상적으로 완료되었습니다.
+
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>📊 검수 결과</h3>
+    
+        <div class="summary-grid">
+    
+            <div class="summary-card">
+    
+                <div class="summary-number">{{ total }}</div>
+    
+                <div class="summary-title">📦 총 주문</div>
+    
+            </div>
+    
+            <div class="summary-card success-card">
+    
+                <div class="summary-number">{{ matched }}</div>
+    
+                <div class="summary-title">🟢 입금완료</div>
+    
+            </div>
+    
+            <div class="summary-card danger-card">
+    
+                <div class="summary-number">{{ unmatched }}</div>
+    
+                <div class="summary-title">🔴 미입금</div>
+    
+            </div>
+    
+            <div class="summary-card warning-card">
+    
+                <div class="summary-number">{{ no_order }}</div>
+    
+                <div class="summary-title">🟡 주문서없음</div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+
+    <div class="card">
+
+        <h3>📥 결과 다운로드</h3>
+
+        <p class="guide">
+
+            검수 결과 파일을 다운로드하여 확인하세요.
+
+        </p>
+
+        <a href="/download/result">
+
+            <button class="download-btn">
+
+                📥 검수결과 다운로드
+
+            </button>
+
+        </a>
+
+    </div>
+
+    <a href="/">
+
+        <button class="home-btn">
+
+            ← 처음으로
+
+        </button>
+
+    </a>
+
+    <p class="version">
+
+        SellerOS v0.4 Stable
+
+    </p>
+
+</div>
+
+</body>
+
+</html>
