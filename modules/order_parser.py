@@ -18,6 +18,7 @@ REQUIRED_COLUMNS = [
 
 
 def clean_columns(df):
+    
 
     df.columns = (
         df.columns
@@ -59,6 +60,8 @@ def load_order_excel(file_path):
     # -------------------------
 
     df = clean_columns(df)
+
+    print("컬럼명:", list(df.columns))
 
     # -------------------------
     # 필수 컬럼 검사
