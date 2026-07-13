@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file, session
 import os
 from werkzeug.utils import secure_filename
-
+import pandas as pd
 from modules.pipeline import run_pipeline
 from modules.error_handler import SellerOSError
 from modules.order_text_parser import load_order_text
@@ -47,6 +47,15 @@ def analyze():
             )
 
             order.save(order_path)
+
+            print("===== 주문파일 저장 =====")
+            print(order_path)
+            print(os.path.exists(order_path))
+            print(os.path.getsize(order_path))
+
+            df = pd.read_excel(order_path, header=None)
+
+            print(df.head(5).to_string())
 
             orders = load_order_excel(order_path)
 
