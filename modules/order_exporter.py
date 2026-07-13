@@ -13,7 +13,7 @@ def save_order_list_excel(orders, file_path):
         "확인",
         "닉네임",
         "상품",
-        "입금자",
+        "성함",
         "연락처",
         "주소",
         "비고"
