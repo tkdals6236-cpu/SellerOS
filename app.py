@@ -144,7 +144,7 @@ def analyze():
     except Exception as e:
 
         traceback.print_exc()
-
+        raise
         return render_template(
             "error.html",
             code="EH999",
