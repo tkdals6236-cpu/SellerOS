@@ -18,14 +18,17 @@ REQUIRED_COLUMNS = [
 
 
 def clean_columns(df):
-    
 
-    df.columns = (
-        df.columns
-        .str.replace("\n", "", regex=False)
-        .str.replace("(*)", "", regex=False)
-        .str.strip()
-    )
+    print("===== 원본 컬럼 =====")
+    print(df.columns.tolist())
+
+    df.columns = [
+        str(col).replace("\n", "").replace("(*)", "").strip()
+        for col in df.columns
+    ]
+
+    print("===== 정리 후 컬럼 =====")
+    print(df.columns.tolist())
 
     return df
 
