@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-
+import shutil
 from modules.error_handler import SellerOSError
 
 
@@ -39,13 +39,16 @@ def load_order_excel(file_path):
     try:
 
         df = pd.read_excel(
-            file_path,
-            dtype=str
-        )
+        file_path,
+        header=None,
+        dtype=str
+    )
 
-    except Exception:
+ 
+    except Exception as e:
 
-        raise SellerOSError("EH006")
+        print(e)
+        raise
 
     # -------------------------
     # 빈 파일 검사
