@@ -71,8 +71,11 @@ def load_order_excel(file_path):
 
         if column not in df.columns:
 
-            raise SellerOSError("EH004")
-
+            raise Exception(
+                f"EH004\n"
+                f"찾는 컬럼 : {column}\n"
+                f"실제 컬럼 : {list(df.columns)}"
+        )
     # -------------------------
     # NaN 제거
     # -------------------------
