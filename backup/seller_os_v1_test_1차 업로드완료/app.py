@@ -121,9 +121,7 @@ def analyze():
             total=result["total"],
             matched=result["matched"],
             unmatched=result["unmatched"],
-            no_order=result["no_order"],
-            preview=result["results"][:10]
-
+            no_order=result["no_order"]
         )
 
     except SellerOSError as e:

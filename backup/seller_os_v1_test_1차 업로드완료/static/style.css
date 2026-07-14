@@ -1,0 +1,982 @@
+/* ==========================================
+   SellerOS Style
+   Version : 0.4 Stable
+   ========================================== */
+
+
+/* ===========================
+   Base
+=========================== */
+
+body{
+
+    margin:0;
+    padding:0;
+
+    background:#f5f7fa;
+
+    font-family:"Malgun Gothic",sans-serif;
+
+}
+
+.container{
+
+    width:900px;
+
+    max-width:95%;
+
+    margin:40px auto;
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:35px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+
+/* ===========================
+   Header
+=========================== */
+
+h1{
+
+    text-align:center;
+
+    margin-bottom:8px;
+
+    font-size:34px;
+
+    color:#2d3436;
+
+    font-weight:700;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#666;
+
+    font-size:15px;
+
+    margin-bottom:35px;
+
+}
+
+.header{
+
+    position:relative;
+
+    margin-bottom:20px;
+
+    padding-bottom:12px;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.version{
+
+    text-align:center;
+
+    margin-top:10px;
+
+    color:#b0b0b0;
+
+    font-size:11px;
+
+}
+
+
+/* ===========================
+   Layout
+=========================== */
+
+.upload-grid{
+
+    display:flex;
+
+    gap:24px;
+
+    align-items:flex-start;
+
+}
+
+.left-panel,
+.right-panel{
+
+    flex:1;
+
+}
+
+
+/* ===========================
+   Card
+=========================== */
+
+.card{
+
+    border:1px solid #e6e6e6;
+
+    border-radius:8px;
+
+    padding:18px;
+
+    margin-bottom:14px;
+
+}
+
+.card h3{
+
+    margin-top:0;
+
+    color:#333;
+
+}
+
+.upload-card{
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.upload-card:hover{
+
+    border:2px solid #4CAF50;
+
+    background:#f8fff8;
+
+}
+
+
+/* ===========================
+   Upload
+=========================== */
+
+
+
+#order-name,
+#bank-name{
+
+    margin-top:15px;
+
+    color:#2e7d32;
+
+    font-weight:bold;
+
+    font-size:14px;
+
+    word-break:break-all;
+
+}
+
+
+/* ===========================
+   Details
+=========================== */
+
+details{
+
+    margin-top:5px;
+
+}
+
+summary{
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    color:#444;
+
+}
+
+summary:hover{
+
+    color:#4CAF50;
+
+}
+
+
+/* ===========================
+   Button
+=========================== */
+
+.analyze-btn,
+.download-btn,
+.home-btn{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:8px;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.analyze-btn{
+
+    padding:13px;
+
+    background:#4CAF50;
+
+    font-size:17px;
+
+}
+
+.analyze-btn:hover{
+
+    background:#43a047;
+
+}
+
+.analyze-btn:disabled{
+
+    background:#bdbdbd;
+
+    cursor:not-allowed;
+
+}
+
+.download-btn{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-top:8px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#4CAF50;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.download-btn:hover{
+
+    background:#43a047;
+
+}
+
+.home-btn{
+
+    padding:11px;
+
+    background:#757575;
+
+    font-size:15px;
+
+    margin-top:10px;
+
+}
+
+.home-btn:hover{
+
+    background:#616161;
+
+}
+
+.blue{
+
+    background:#1976d2;
+
+}
+
+.blue:hover{
+
+    background:#1565c0;
+
+}
+
+
+/* ===========================
+   Guide
+=========================== */
+
+.guide{
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:13px;
+
+    margin-top:15px;
+
+}
+
+
+/* ===========================
+   Result
+=========================== */
+
+.result{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:18px;
+
+    margin:15px 0;
+
+}
+
+.success{
+
+    color:#2e7d32;
+
+}
+
+.warning{
+
+    color:#f9a825;
+
+}
+
+.danger{
+
+    color:#d32f2f;
+
+}
+
+
+/* ===========================
+   Loading
+=========================== */
+
+#loadingOverlay{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+.loading-box{
+
+    width:300px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+.spinner{
+
+    width:50px;
+
+    height:50px;
+
+    margin:0 auto 20px;
+
+    border:5px solid #ddd;
+
+    border-top:5px solid #4CAF50;
+
+    border-radius:50%;
+
+    animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+.upload-card{
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.upload-card:hover{
+
+    border:1px solid #4CAF50;
+
+    box-shadow:0 8px 20px rgba(76,175,80,.12);
+
+    transform:translateY(-2px);
+
+}
+.upload-icon{
+
+    font-size:52px;
+
+    color:#4CAF50;
+
+    text-align:center;
+
+    margin:20px 0 10px;
+
+}
+
+.file-type{
+
+    text-align:center;
+
+    color:#999;
+
+    font-size:13px;
+
+    margin-top:5px;
+
+    margin-bottom:20px;
+
+}
+
+.upload-btn{
+
+    display:block;
+
+    margin:0 auto;
+
+    padding:12px 28px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#4CAF50;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.upload-btn:hover{
+
+    background:#43a047;
+
+    transform:translateY(-1px);
+
+}
+
+.upload-card{
+
+    text-align:center;
+
+}
+
+.upload-card h3{
+
+    text-align:left;
+
+}
+
+.drop-guide{
+
+    text-align:center;
+
+    margin-top:0;
+
+    color:#555;
+
+    font-size:15px;
+
+}
+.optional{
+
+    color:#999;
+
+    font-size:13px;
+
+    font-weight:normal;
+
+}
+
+.paste-guide{
+
+    color:#666;
+
+    font-size:13px;
+
+    margin:10px 0 15px;
+
+}
+
+textarea{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    resize:vertical;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:12px;
+
+    font-size:14px;
+
+    font-family:inherit;
+
+    transition:.2s;
+
+}
+
+textarea:focus{
+
+    outline:none;
+
+    border-color:#4CAF50;
+
+    box-shadow:0 0 0 3px rgba(76,175,80,.15);
+
+}
+.result strong{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#2d3436;
+
+}
+/* ==========================
+   Result Dashboard
+========================== */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+.summary-card{
+
+    background:#fafafa;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    text-align:center;
+
+    transition:.2s;
+
+}
+
+.summary-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+
+}
+
+.summary-number{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#2d3436;
+
+}
+
+.summary-title{
+
+    margin-top:6px;
+
+    color:#666;
+
+    font-size:15px;
+
+}
+
+.success-card{
+
+    background:#edf8ef;
+
+}
+
+.danger-card{
+
+    background:#fdeeee;
+
+}
+
+.warning-card{
+
+    background:#fff8e6;
+
+}
+.example-box{
+
+    margin:12px 0;
+
+    padding:12px 16px;
+
+    background:#f8f9fa;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:8px;
+
+    color:#666;
+
+    font-size:13px;
+
+    line-height:1.8;
+
+}
+
+
+.security-title{
+
+    font-weight:700;
+
+    color:#2e7d32;
+
+    margin-bottom:6px;
+
+    font-size:14px;
+
+}
+
+
+
+.security-box{
+
+    margin-top:18px;
+
+    padding:12px 14px;
+
+    background:#f6fcf7;
+
+    border:1px solid #d8ead8;
+
+    border-radius:8px;
+
+}
+
+
+.security-text{
+
+    color:#666;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+.paste-info{
+
+    margin:10px 0;
+
+    padding:10px 12px;
+
+    background:#fff8e8;
+
+    border-left:4px solid #ffb300;
+
+    border-radius:6px;
+
+    color:#666;
+
+    font-size:12px;
+
+    line-height:1.5;
+
+}
+
+
+.remove-file{
+
+    cursor:pointer;
+
+    color:#999;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.remove-file:hover{
+
+    color:#d32f2f;
+
+}
+
+
+.file-selected{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    margin-top:15px;
+
+}
+
+.file-name{
+
+    font-weight:bold;
+
+    color:#2e7d32;
+
+    margin-bottom:10px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    width:100%;
+
+}
+
+.file-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    width:100%;
+
+    gap:10px;
+
+    margin-top:6px;
+
+}
+
+
+.mini-btn{
+
+    border:none;
+
+    background:none;
+
+    color:#777;
+
+    font-size:12px;
+
+    padding:2px 4px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.mini-btn:hover{
+
+    color:#1976d2;
+
+}
+
+.delete-btn{
+
+    color:#777;
+
+}
+
+.delete-btn:hover{
+
+    color:#d32f2f;
+
+}
+
+textarea:disabled{
+
+    background:#f5f5f5;
+
+    color:#888;
+
+    cursor:not-allowed;
+
+}
+.guide-btn{
+
+    position:absolute;
+
+    top:8px;
+
+    right:0;
+
+    background:#fff;
+
+    border:1px solid #e6e6e6;
+
+    color:#666;
+
+    padding:7px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.guide-btn:hover{
+
+    background:#43a047;
+
+}
+
+.guide-btn:hover{
+
+    border-color:#4CAF50;
+
+    color:#4CAF50;
+
+    background:#f8fff8;
+
+}
+
+
+#guideModal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.6);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.guide-content{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:10px;
+
+    max-width:96vw;
+
+    max-height:96vh;
+
+    overflow:hidden;
+
+}
+
+.guide-image{
+
+    display:block;
+
+    max-width:96vw;
+
+    max-height:92vh;
+
+    width:auto;
+
+    height:auto;
+
+    margin:auto;
+
+    cursor:pointer;
+
+}
+
+#closeGuide{
+
+    position:absolute;
+
+    right:15px;
+
+    top:15px;
+
+    border:none;
+
+    background:none;
+
+    font-size:26px;
+
+    cursor:pointer;
+
+}
+
+.guide-footer{
+
+    margin-top:20px;
+
+    text-align:center;
+
+}

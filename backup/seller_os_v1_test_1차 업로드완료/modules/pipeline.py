@@ -100,7 +100,6 @@ def run_pipeline(bank_file, order_file=None, orders=None):
         "matched": matched_count,
         "unmatched": unmatched_count,
         "no_order": no_order_count,
-        "total": len(results),
-        "results": results
+        "total": len(results)
 
     }
