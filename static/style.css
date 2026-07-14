@@ -605,27 +605,17 @@ textarea:focus{
 
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(4,1fr);
 
     gap:12px;
-
-    margin-top:20px;
 
 }
 
 .summary-card{
 
-    background:#fafafa;
+    padding:12px;
 
-    border:1px solid #e5e5e5;
-
-    border-radius:12px;
-
-    padding:14px;
-
-    text-align:center;
-
-    transition:.2s;
+    border-radius:10px;
 
 }
 
@@ -639,23 +629,15 @@ textarea:focus{
 
 .summary-number{
 
-    font-size:30px;
+    font-size:28px;
 
-    font-weight:700;
-
-    margin-bottom:4px;
-
-    color:#2d3436;
+    margin-bottom:2px;
 
 }
 
 .summary-title{
 
-    margin-top:6px;
-
-    color:#666;
-
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -1158,15 +1140,6 @@ textarea:disabled{
    Compact Summary
 =========================== */
 
-.compact-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:14px;
-
-}
 .preview-count{
 
     float:right;
