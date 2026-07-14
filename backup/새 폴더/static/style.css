@@ -255,6 +255,28 @@ summary:hover{
 
     width:100%;
 
+    padding:16px;
+
+    margin-top:18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#4CAF50;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    height:52px;
+
 }
 
 .download-btn:hover{
@@ -265,7 +287,14 @@ summary:hover{
 
 .home-btn{
 
-    width:100%;
+    padding:11px;
+
+    background:#757575;
+
+    font-size:15px;
+
+    margin-top:10px;
+
 }
 
 .home-btn:hover{
@@ -1116,37 +1145,5 @@ textarea:disabled{
     color:#999;
 
     font-size:13px;
-
-}
-.result-layout{
-
-    display:flex;
-
-    gap:24px;
-
-    align-items:flex-start;
-
-}
-
-.result-main{
-
-    flex:1;
-
-}
-
-.result-side{
-
-    width:300px;
-
-}
-.button-group{
-
-    display:grid;
-
-    grid-template-columns:2fr 1fr;
-
-    gap:16px;
-
-    margin-top:18px;
 
 }
