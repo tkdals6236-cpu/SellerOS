@@ -29,13 +29,17 @@
 
         {% else %}
 
-        <h1>✅ 자동 검수 완료</h1>
+        <div class="result-header">
 
-        <p class="subtitle">
-
-            주문과 입금내역 검수가 완료되었습니다.
-
-        </p>
+            <div class="result-icon">✅</div>
+        
+            <h1>검수가 완료되었습니다!</h1>
+        
+            <p class="subtitle">
+                총 <b>{{ total }}</b>건의 주문을 검수했습니다.
+            </p>
+        
+        </div>
 
         {% endif %}
 
@@ -84,8 +88,7 @@
 
     <div class="card">
 
-        <h3>📊 검수 결과</h3>
-
+        
         <div class="summary-grid">
 
             <div class="summary-card">
