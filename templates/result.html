@@ -13,35 +13,33 @@
 
 <body>
 
-<div class="container">
-
-    <div class="header">
+    <div class="container">
 
         {% if order_only %}
-
-        <h1>📋 주문목록 생성 완료</h1>
-
-        <p class="subtitle">
-
-            주문목록이 정상적으로 생성되었습니다.
-
-        </p>
-
+        
+        <div class="header">
+        
+            <h1>📋 주문목록 생성 완료</h1>
+        
+            <p class="subtitle">
+                주문목록이 정상적으로 생성되었습니다.
+            </p>
+        
+        </div>
+        
         {% else %}
-
+        
         <div class="result-header">
-                  
-            <h1>✅검수가 완료되었습니다!</h1>
+        
+            <h1>✅ 검수가 완료되었습니다!</h1>
         
             <p class="subtitle">
                 총 <b>{{ total }}</b>건의 주문을 검수했습니다.
             </p>
         
         </div>
-
+        
         {% endif %}
-
-    </div>
 
     {% if order_only %}
 
