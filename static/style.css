@@ -21,19 +21,17 @@ body{
 
 .container{
 
-    width:1100px;
+    width:1320px;
 
-    max-width:95%;
+    max-width:96%;
 
-    margin:40px auto;
+    margin:24px auto;
 
-    background:white;
+    background:#fff;
 
-    border-radius:12px;
+    border-radius:16px;
 
-    padding:35px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:28px;
 
 }
 
@@ -121,13 +119,15 @@ h1{
 
 .card{
 
-    border:1px solid #e9ecef;
+    background:#fff;
+
+    border:1px solid #e8edf3;
 
     border-radius:12px;
 
-    padding:14px;
+    padding:16px;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
     box-shadow:0 2px 8px rgba(0,0,0,.04);
 
@@ -978,7 +978,7 @@ textarea:disabled{
 
 .preview-card{
 
-    margin-top:18px;
+    margin-top:0;
 
 }
 
@@ -1101,13 +1101,17 @@ textarea:disabled{
 
 .result-main{
 
-    flex:7;
+    flex:3;
+
+    min-width:0;
 
 }
 
 .result-side{
 
-    flex:3;
+    flex:1;
+
+    min-width:260px;
 
 }
 
