@@ -98,6 +98,7 @@ def validate_results(matched, unmatched, no_order):
                 nickname=item["order"]["nickname"],
 
                 depositor=item["order"]["depositor"],
+                
                 bank_depositor=item["bank"]["depositor"],
 
                 product=item["order"]["product"],

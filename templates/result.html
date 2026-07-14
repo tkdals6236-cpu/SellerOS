@@ -167,9 +167,16 @@
     
                     <td>{{ item.product }}</td>
 
-                    <td>{{ item.depositor }}</td>
                     <td>{{ item.bank_depositor or "-" }}</td>
-    
+
+                    <td>
+                        {% if item.amount %}
+                            {{ "{:,}".format(item.amount|int) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
                     <td>
     
                         {% if item.status == "MATCH" %}
