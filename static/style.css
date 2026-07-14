@@ -1124,15 +1124,17 @@ textarea:disabled{
 
     top:12px;
 
-    padding:14px !important;
+    padding:16px !important;
+
+    margin-bottom:16px;
 
 }
 
 .help-item{
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
-    padding-bottom:12px;
+    padding-bottom:10px;
 
     border-bottom:1px solid #efefef;
 
@@ -1140,7 +1142,7 @@ textarea:disabled{
 
     color:#666;
 
-    line-height:1.5;
+    line-height:1.55;
 
 }
 
@@ -1167,7 +1169,7 @@ textarea:disabled{
 
     text-align:center;
 
-    margin-bottom:14px;
+    margin-bottom:12px;
 
 }
 
@@ -1196,5 +1198,16 @@ textarea:disabled{
     margin-bottom:0;
 
     font-size:14px;
+
+}
+.result-main{
+
+    flex:3.8;
+
+}
+
+.result-side{
+
+    flex:.9;
 
 }
