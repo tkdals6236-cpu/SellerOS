@@ -627,17 +627,15 @@ textarea:focus{
 
 }
 
-.summary-number{
+.summary-title{
 
-    font-size:28px;
-
-    margin-bottom:2px;
+    margin-bottom:8px;
 
 }
 
-.summary-title{
+.summary-number{
 
-    font-size:12px;
+    margin-top:4px;
 
 }
 
