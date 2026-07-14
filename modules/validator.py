@@ -46,6 +46,7 @@ def make_result(
     status,
     nickname="",
     depositor="",
+    bank_depositor="",
     product="",
     phone="",
     address="",
@@ -64,7 +65,7 @@ def make_result(
         "nickname": nickname,
 
         "depositor": depositor,
-
+        "bank_depositor": bank_depositor,
         "product": product,
 
         "phone": phone,
@@ -97,6 +98,7 @@ def validate_results(matched, unmatched, no_order):
                 nickname=item["order"]["nickname"],
 
                 depositor=item["order"]["depositor"],
+                bank_depositor=item["bank"]["depositor"],
 
                 product=item["order"]["product"],
 
@@ -151,6 +153,7 @@ def validate_results(matched, unmatched, no_order):
                 "NO_ORDER",
 
                 depositor=item["depositor"],
+                bank_depositor=item["depositor"],
 
                 amount=item["amount"],
 

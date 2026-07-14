@@ -275,6 +275,8 @@ summary:hover{
 
     transition:.2s;
 
+    height:52px;
+
 }
 
 .download-btn:hover{
@@ -1014,7 +1016,7 @@ textarea:disabled{
 
 .preview-table thead{
 
-    background:#f7f8fa;
+    background:#f7f8fb;
 
 }
 
@@ -1036,9 +1038,15 @@ textarea:disabled{
 
 }
 
+.preview-table tr:nth-child(even){
+
+    background:#fcfcfc;
+
+}
+
 .preview-table tr:hover{
 
-    background:#fafafa;
+    background:#f4fff4;
 
 }
 
@@ -1086,5 +1094,61 @@ textarea:disabled{
     background:#fff4dc;
 
     color:#ef8f00;
+
+}
+
+/* ===========================
+   Result Layout
+=========================== */
+
+.result-layout{
+
+    display:flex;
+
+    gap:24px;
+
+    align-items:flex-start;
+
+}
+
+.result-main{
+
+    flex:7;
+
+}
+
+.result-side{
+
+    flex:3;
+
+}
+
+.help-card{
+
+    position:sticky;
+
+    top:20px;
+
+}
+
+.help-item{
+
+    margin-bottom:18px;
+
+    padding-bottom:15px;
+
+    border-bottom:1px solid #efefef;
+
+    font-size:13px;
+
+    color:#666;
+
+    line-height:1.7;
+
+}
+
+.help-item:last-child{
+
+    border:none;
 
 }
