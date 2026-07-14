@@ -125,7 +125,7 @@ h1{
 
     border-radius:12px;
 
-    padding:22px;
+    padding:18px;
 
     margin-bottom:18px;
 
@@ -621,7 +621,7 @@ textarea:focus{
 
     border-radius:12px;
 
-    padding:12px;
+    padding:14px;
 
     text-align:center;
 
@@ -639,9 +639,11 @@ textarea:focus{
 
 .summary-number{
 
-    font-size:38px;
+    font-size:30px;
 
     font-weight:700;
+
+    margin-bottom:4px;
 
     color:#2d3436;
 
@@ -653,7 +655,7 @@ textarea:focus{
 
     color:#666;
 
-    font-size:15px;
+    font-size:13px;
 
 }
 
@@ -1133,9 +1135,9 @@ textarea:disabled{
 
 .help-item{
 
-    margin-bottom:18px;
+    margin-bottom:12px;
 
-    padding-bottom:15px;
+    padding-bottom:12px;
 
     border-bottom:1px solid #efefef;
 
@@ -1143,12 +1145,34 @@ textarea:disabled{
 
     color:#666;
 
-    line-height:1.7;
+    line-height:1.5;
 
 }
 
 .help-item:last-child{
 
     border:none;
+
+}
+/* ===========================
+   Compact Summary
+=========================== */
+
+.compact-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:14px;
+
+}
+.preview-count{
+
+    float:right;
+
+    color:#999;
+
+    font-size:13px;
 
 }

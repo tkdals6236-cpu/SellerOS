@@ -33,7 +33,7 @@
 
         <p class="subtitle">
 
-            주문과 입금내역 검수가 정상적으로 완료되었습니다.
+            주문과 입금내역 검수가 완료되었습니다.
 
         </p>
 
@@ -52,6 +52,8 @@
         <div class="summary-grid">
 
             <div class="summary-card">
+
+                <div class="summary-grid compact-grid"></div>
 
                 <div class="summary-number">{{ total }}</div>
 
@@ -124,7 +126,13 @@
 
     <div class="card preview-card">
 
-        <h3>📋 주문목록 미리보기</h3>
+        <h3>📋 주문목록 미리보기
+            <span class="preview-count">
+
+                10 / {{ total }}
+                
+                </span>
+        </h3>
     
         <p class="preview-info">
             최근 주문 10건을 미리 보여드립니다.
