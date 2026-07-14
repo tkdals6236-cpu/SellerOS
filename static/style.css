@@ -22,10 +22,9 @@ body{
 .container{
 
     width:1320px;
-
     max-width:96%;
 
-    margin-top:8px;
+    margin:8px auto 20px;
 
     background:#fff;
 
