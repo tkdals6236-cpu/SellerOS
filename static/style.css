@@ -21,7 +21,26 @@ body{
 
 .container{
 
+    width:1100px;
+
+    max-width:95%;
+
+    margin:40px auto;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:35px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.result-container{
+
     width:1320px;
+
     max-width:96%;
 
     margin:8px auto 20px;
@@ -32,8 +51,9 @@ body{
 
     padding:22px;
 
-}
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 
+}
 
 /* ===========================
    Header
