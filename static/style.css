@@ -968,7 +968,7 @@ textarea:disabled{
 
 .preview-card{
 
-    margin-top:0;
+    width:100%;
 
 }
 
@@ -989,6 +989,8 @@ textarea:disabled{
     border-collapse:collapse;
 
     font-size:14px;
+
+    table-layout:auto;
 
 }
 
@@ -1086,14 +1088,6 @@ textarea:disabled{
     gap:24px;
 
     align-items:flex-start;
-
-}
-
-.result-main{
-
-    flex:3;
-
-    min-width:0;
 
 }
 
