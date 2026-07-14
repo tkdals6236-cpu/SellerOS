@@ -29,30 +29,17 @@
 
         {% else %}
 
-        <div class="header">
-            <div class="result-layout">
+        <h1>✅ 자동 검수 완료</h1>
 
-                <div class="result-main">
+        <p class="subtitle">
 
-            {% if order_only %}
-        
-                <h1>📋 주문목록 생성 완료</h1>
-        
-                <p class="subtitle">
-                    총 <b>{{ total }}</b>건의 주문목록이 생성되었습니다.
-                </p>
-        
-            {% else %}
-        
-                <h1>✅ 자동 검수 완료</h1>
-        
-                <p class="subtitle">
-                    총 <b>{{ total }}</b>건의 주문을 검수했습니다.
-                </p>
-        
-            {% endif %}
-        
-        </div>
+            주문과 입금내역 검수가 완료되었습니다.
+
+        </p>
+
+        {% endif %}
+
+    </div>
 
     {% if order_only %}
 
@@ -158,6 +145,7 @@
                 <tr>
                     <th style="width:70px;">No</th>
                     <th>닉네임</th>
+                    <th>성함</th>
                     <th>상품</th>
                     <th>입금자명</th>
                     <th>입금금액</th>
