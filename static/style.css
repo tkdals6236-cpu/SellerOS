@@ -21,7 +21,7 @@ body{
 
 .container{
 
-    width:900px;
+    width:1100px;
 
     max-width:95%;
 
@@ -121,13 +121,15 @@ h1{
 
 .card{
 
-    border:1px solid #e6e6e6;
+    border:1px solid #e9ecef;
 
-    border-radius:8px;
+    border-radius:12px;
 
-    padding:18px;
+    padding:22px;
 
-    margin-bottom:14px;
+    margin-bottom:18px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.04);
 
 }
 
@@ -255,7 +257,7 @@ summary:hover{
 
     padding:16px;
 
-    margin-top:8px;
+    margin-top:18px;
 
     border:none;
 
@@ -265,9 +267,9 @@ summary:hover{
 
     color:white;
 
-    font-size:17px;
+    font-size:16px;
 
-    font-weight:600;
+    font-weight:700;
 
     cursor:pointer;
 
@@ -627,15 +629,15 @@ textarea:focus{
 
 .summary-card:hover{
 
-    transform:translateY(-2px);
+    transform:translateY(-3px);
 
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
 
 }
 
 .summary-number{
 
-    font-size:28px;
+    font-size:38px;
 
     font-weight:700;
 
@@ -978,5 +980,111 @@ textarea:disabled{
     margin-top:20px;
 
     text-align:center;
+
+}
+/* ===========================
+   Preview Table
+=========================== */
+
+.preview-card{
+
+    margin-top:18px;
+
+}
+
+.preview-info{
+
+    color:#888;
+
+    font-size:13px;
+
+    margin-bottom:14px;
+
+}
+
+.preview-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    font-size:14px;
+
+}
+
+.preview-table thead{
+
+    background:#f7f8fa;
+
+}
+
+.preview-table th{
+
+    padding:12px;
+
+    text-align:left;
+
+    border-bottom:1px solid #e5e5e5;
+
+}
+
+.preview-table td{
+
+    padding:11px 12px;
+
+    border-bottom:1px solid #f0f0f0;
+
+}
+
+.preview-table tr:hover{
+
+    background:#fafafa;
+
+}
+
+.preview-tip{
+
+    margin-top:12px;
+
+    color:#999;
+
+    font-size:12px;
+
+}
+.badge{
+
+    display:inline-block;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge.success{
+
+    background:#eaf8ed;
+
+    color:#2e7d32;
+
+}
+
+.badge.danger{
+
+    background:#fdecec;
+
+    color:#d32f2f;
+
+}
+
+.badge.warning{
+
+    background:#fff4dc;
+
+    color:#ef8f00;
 
 }
