@@ -9,11 +9,13 @@ from modules.order_exporter import save_order_list_excel
 from datetime import datetime
 from modules.group_preview import group_preview
 import shutil
+import time
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
 
-def clean_temp_folders():
+
+def clean_old_files():
 
     folders = [
         "uploads/orders",
@@ -21,9 +23,12 @@ def clean_temp_folders():
         "output"
     ]
 
+    now = time.time()
+
     for folder in folders:
 
-        os.makedirs(folder, exist_ok=True)
+        if not os.path.exists(folder):
+            continue
 
         for filename in os.listdir(folder):
 
@@ -31,17 +36,20 @@ def clean_temp_folders():
 
             try:
 
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
+                if not os.path.isfile(file_path):
+                    continue
 
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
+                age = now - os.path.getmtime(file_path)
+
+                # 30분(1800초) 지난 파일 삭제
+                if age > 10:
+                    os.remove(file_path)
 
             except Exception as e:
 
                 print(f"삭제 실패 : {file_path} ({e})")
 
-clean_temp_folders()
+# clean_temp_folders()
 
 @app.route("/")
 def home():
@@ -52,7 +60,8 @@ def home():
 def analyze():
 
     try:
-
+ 
+        clean_old_files()
         order = request.files.get("order_file")
         bank = request.files.get("bank_file")
 
