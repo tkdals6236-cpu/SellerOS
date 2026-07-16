@@ -115,9 +115,9 @@ body{
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:16px;
+    gap:12px;
 
-    margin:20px 0 22px;
+    margin:14px 0 16px;
 
 }
 
@@ -311,6 +311,20 @@ body{
 
     color:#999;
 
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.preview-warning{
+
+    font-size:12px;
+
+    color:#d48806;
+
 }
 
 .preview-table{
@@ -363,7 +377,7 @@ body{
 
 .preview-tip{
 
-    padding:8px 16px;
+    padding:4px 16px;
 
     font-size:12px;
 
@@ -519,7 +533,7 @@ body{
 
 .result-footer{
 
-    margin-top:26px;
+    margin-top:16px;
 
     display:flex;
 
@@ -527,7 +541,7 @@ body{
 
     align-items:center;
 
-    gap:12px;
+    gap:8px;
 
 }
 
@@ -535,7 +549,7 @@ body{
 
     width:380px;
 
-    height:46px;
+    height:42px;
 
     border:none;
 
@@ -557,7 +571,7 @@ body{
 
     width:380px;
 
-    height:42px;
+    height:38px;
 
     border:1px solid #d8d8d8;
 
@@ -632,3 +646,4 @@ body{
     text-align:left;
     padding-left:12px;
 }
+

@@ -17,6 +17,7 @@ app.secret_key = "selleros_dev"
 
 def clean_old_files():
 
+    
     folders = [
         "uploads/orders",
         "uploads/banks",
@@ -41,8 +42,9 @@ def clean_old_files():
 
                 age = now - os.path.getmtime(file_path)
 
-                # 30분(1800초) 지난 파일 삭제
-                if age > 10:
+                # 임시 파일은 30분(1800초) 지난 파일 삭제
+                if age > 1800:
+                    
                     os.remove(file_path)
 
             except Exception as e:
@@ -54,6 +56,14 @@ def clean_old_files():
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/download/sample")
+def download_sample():
+
+    return send_file(
+        "sample/sample.zip",
+        as_attachment=True
+    )
 
 
 @app.route("/analyze", methods=["POST"])

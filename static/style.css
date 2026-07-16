@@ -886,6 +886,42 @@ textarea:disabled{
 
 }
 
+.sample-btn{
+
+    position:absolute;
+
+    top:8px;
+
+    right:120px;
+
+    background:#fff;
+
+    border:1px solid #e6e6e6;
+
+    color:#666;
+
+    padding:7px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+.sample-btn:hover{
+
+    background:#f8f8f8;
+
+    border-color:#4CAF50;
+
+    color:#4CAF50;
+
+}
+
 .guide-btn:hover{
 
     background:#43a047;
