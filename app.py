@@ -8,11 +8,40 @@ from modules.order_parser import load_order_excel
 from modules.order_exporter import save_order_list_excel
 from datetime import datetime
 from modules.group_preview import group_preview
-
+import shutil
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
 
+def clean_temp_folders():
+
+    folders = [
+        "uploads/orders",
+        "uploads/banks",
+        "output"
+    ]
+
+    for folder in folders:
+
+        os.makedirs(folder, exist_ok=True)
+
+        for filename in os.listdir(folder):
+
+            file_path = os.path.join(folder, filename)
+
+            try:
+
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+
+                print(f"삭제 실패 : {file_path} ({e})")
+
+clean_temp_folders()
 
 @app.route("/")
 def home():
