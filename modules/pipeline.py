@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from modules.order_parser import load_order_excel
 from modules.bank_parser import load_bank_excel
 from modules.matcher import match_orders
@@ -7,6 +6,7 @@ from modules.validator import validate_results
 from modules.exporter import save_result_excel
 from modules.logen_exporter import export_logen_excel
 from modules.logger import logger
+from modules.group_results import group_results
 
 
 def run_pipeline(bank_file, order_file=None, orders=None):
@@ -41,8 +41,7 @@ def run_pipeline(bank_file, order_file=None, orders=None):
         orders,
         banks
     )
-
-    # -------------------------
+       # -------------------------
     # 검증
     # -------------------------
     results = validate_results(
@@ -93,6 +92,8 @@ def run_pipeline(bank_file, order_file=None, orders=None):
     logger.write("검수 완료")
     logger.divider()
 
+    preview = group_results(results)
+
     return {
 
         "result_file": output_file,
@@ -101,6 +102,8 @@ def run_pipeline(bank_file, order_file=None, orders=None):
         "unmatched": unmatched_count,
         "no_order": no_order_count,
         "total": len(results),
-        "results": results
+        "results": results,
+        "preview": preview
+
 
     }

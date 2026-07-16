@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SellerOS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        {% if order_only %}
+
+        <h1>📋 주문목록 생성 완료</h1>
+
+        <p class="subtitle">
+
+            주문목록이 정상적으로 생성되었습니다.
+
+        </p>
+
+        {% else %}
+
+        <h1>✅ 자동 검수 완료</h1>
+
+        <p class="subtitle">
+
+            주문과 입금내역 검수가 완료되었습니다.
+
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    {% if order_only %}
+
+    <!-- 주문목록 생성 -->
+
+    <div class="card">
+
+        <h3>📋 생성 결과</h3>
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-grid compact-grid"></div>
+
+                <div class="summary-number">{{ total }}</div>
+
+                <div class="summary-title">📦 총 주문</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <a href="/download/result">
+
+        <button class="download-btn">
+
+            📋 주문목록 다운로드
+
+        </button>
+
+    </a>
+
+    {% else %}
+
+    <!-- 자동 검수 -->
+    <div class="result-layout">
+
+        <div class="result-main"> 
+
+    <div class="card">
+
+        <h3>📊 검수 결과</h3>
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-number">{{ total }}</div>
+
+                <div class="summary-title">📦 총 주문</div>
+
+            </div>
+
+            <div class="summary-card success-card">
+
+                <div class="summary-number">{{ matched }}</div>
+
+                <div class="summary-title">🟢 입금완료</div>
+
+            </div>
+
+            <div class="summary-card danger-card">
+
+                <div class="summary-number">{{ unmatched }}</div>
+
+                <div class="summary-title">🔴 미입금</div>
+
+            </div>
+
+            <div class="summary-card warning-card">
+
+                <div class="summary-number">{{ no_order }}</div>
+
+                <div class="summary-title">🟡 주문서없음</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card preview-card">
+
+        <h3>📋 주문목록 미리보기
+            <span class="preview-count">
+
+                10 / {{ total }}
+                
+                </span>
+        </h3>
+    
+        <p class="preview-info">
+            최근 주문 10건을 미리 보여드립니다.
+        </p>
+    
+        <table class="preview-table">
+    
+            <thead>
+    
+                <tr>
+                    <th style="width:70px;">No</th>
+                    <th>닉네임</th>
+                    <th>상품</th>
+                    <th>상품</th>
+                    <th>입금자명</th>
+                    <th>입금금액</th>
+                    <th style="width:130px;">결과</th>
+                </tr>
+    
+            </thead>
+    
+            <tbody>
+    
+            {% for item in preview %}
+    
+                <tr>
+                    <td>{{ loop.index }}</td>
+
+                    <td>{{ item.nickname }}</td>
+
+                    <td>{{ item.depositor }}</td>
+    
+                    <td>{{ item.product }}</td>
+
+                    <td>{{ item.bank_depositor or "-" }}</td>
+
+                    <td>
+                        {% if item.amount %}
+                            {{ "{:,}".format(item.amount|int) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td>
+    
+                        {% if item.status == "MATCH" %}
+    
+                            <span class="badge success">
+                                입금완료
+                            </span>
+    
+                        {% elif item.status == "NO_PAYMENT" %}
+    
+                            <span class="badge danger">
+                                미입금
+                            </span>
+    
+                        {% else %}
+    
+                            <span class="badge warning">
+                                주문서없음
+                            </span>
+    
+                        {% endif %}
+    
+                    </td>
+    
+                </tr>
+    
+            {% endfor %}
+    
+            </tbody>
+    
+        </table>
+    
+        <p class="preview-tip">
+    
+            ※ 전체 주문목록은 다운로드하여 확인하세요.
+    
+        </p>
+    
+    </div>
+    </div>
+    <div class="result-side">
+
+        <div class="card help-card">
+    
+            <h3>📘 사용 안내</h3>
+    
+            <div class="help-item">
+    
+                <strong>① 검수 결과</strong><br>
+    
+                상단 카드에서 전체 검수 현황을 확인하세요.
+    
+            </div>
+    
+            <div class="help-item">
+    
+                <strong>② 미리보기</strong><br>
+    
+                대표 결과를 먼저 확인할 수 있습니다.
+    
+            </div>
+    
+            <div class="help-item">
+    
+                <strong>③ 결과 다운로드</strong><br>
+    
+                전체 결과는 엑셀 파일로 저장하세요.
+    
+            </div>
+    
+            <div class="help-item">
+    
+                💡 미입금은 빨간색으로 표시됩니다.
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    </div>
+        
+
+    <a href="/download/result">
+
+        <button class="download-btn">
+
+            📥 검수결과 다운로드
+
+        </button>
+
+    </a>
+
+    {% endif %}
+
+    <a href="/">
+
+        <button class="home-btn">
+
+            ← 처음으로
+
+        </button>
+
+    </a>
+
+    <p class="version">
+
+        SellerOS v0.4 Stable
+
+    </p>
+
+</div>
+
+</body>
+
+</html>

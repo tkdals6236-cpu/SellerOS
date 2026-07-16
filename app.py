@@ -7,6 +7,7 @@ from modules.order_text_parser import load_order_text
 from modules.order_parser import load_order_excel
 from modules.order_exporter import save_order_list_excel
 from datetime import datetime
+from modules.group_preview import group_preview
 
 
 app = Flask(__name__)
@@ -77,11 +78,14 @@ def analyze():
                 output_file
             )
 
+            preview = group_preview(orders)
+
             session["result_file"] = output_file
 
             return render_template(
                 "result.html",
                 total=len(orders),
+                preview=preview[:10],
                 matched=0,
                 unmatched=0,
                 no_order=0,
@@ -122,7 +126,7 @@ def analyze():
             matched=result["matched"],
             unmatched=result["unmatched"],
             no_order=result["no_order"],
-            preview=result["results"][:10]
+            preview=result["preview"][:10]
 
         )
 

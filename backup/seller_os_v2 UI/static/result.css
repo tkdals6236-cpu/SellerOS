@@ -1,0 +1,607 @@
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#f5f7fb;
+    font-family:"Malgun Gothic",sans-serif;
+    color:#333;
+
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page-layout{
+
+    width:1500px;
+
+    max-width:98%;
+
+    margin:12px auto;
+
+    display:grid;
+
+    grid-template-columns:1fr 270px;
+
+    gap:18px;
+
+    align-items:start;
+
+}
+
+
+/* =========================
+   LEFT
+========================= */
+
+.left-panel{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:18px 20px 20px;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+
+}
+
+
+/* =========================
+   RIGHT
+========================= */
+
+.right-panel{
+
+    width:270px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.result-header{
+
+    text-align:center;
+
+    margin-bottom:8px;
+
+}
+
+.result-header h1{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:4px;
+
+}
+
+.subtitle{
+
+    color:#666;
+
+    font-size:14px;
+
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:16px;
+
+    margin:20px 0 22px;
+
+}
+
+.summary-card{
+
+    height:70px;
+
+    padding:12px 16px;
+
+    border:1px solid #e8edf3;
+
+    border-radius:12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    background:#fff;
+
+    box-shadow:none;
+
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.help-card{
+
+    background:#fff;
+
+    border:1px solid #ececec;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+
+}
+
+.help-card h3{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
+.help-item{
+
+    font-size:13px;
+
+    color:#555;
+
+    line-height:1.7;
+
+    padding-bottom:16px;
+
+    margin-bottom:16px;
+
+    border-bottom:1px solid #f1f1f1;
+
+}
+
+.help-item:last-child{
+
+    margin-bottom:0;
+
+    padding-bottom:0;
+
+    border:none;
+
+}
+
+.version{
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#999;
+
+    margin-top:10px;
+
+}
+
+.success-card{
+
+    background:#eef9f0;
+
+}
+
+.danger-card{
+
+    background:#fdeeee;
+
+}
+
+.warning-card{
+
+    background:#fff7e4;
+
+}
+
+.summary-number{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    line-height:1;
+
+    color:#222;
+
+    margin-bottom:8px;
+
+}
+
+.summary-title{
+
+    font-size:12px;
+
+    color:#666;
+
+    font-weight:600;
+
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview-card{
+
+    margin-top:12px;
+
+    border:1px solid #e8edf3;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    background:#fff;
+
+}
+
+.preview-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 16px;
+
+    border-bottom:1px solid #eef1f5;
+
+}
+
+.preview-header h3{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#222;
+
+}
+
+.preview-header span{
+
+    font-size:12px;
+
+    color:#999;
+
+}
+
+.preview-info{
+
+    padding:6px 18px 8px;
+
+    font-size:12px;
+
+    color:#999;
+
+}
+
+.preview-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.preview-table thead{
+
+    background:#f7f9fc;
+
+}
+
+.preview-table th{
+
+    background:#f7f9fc;
+
+    padding:9px 8px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#555;
+
+    text-align:center;
+
+    border-bottom:1px solid #eceff3;
+
+}
+
+.preview-table td{
+
+    padding:8px 8px;
+
+    font-size:12px;
+
+    color:#444;
+
+    text-align:center;
+
+    border-bottom:1px solid #f3f3f3;
+
+    vertical-align:middle;
+
+}
+
+.preview-tip{
+
+    padding:8px 16px;
+
+    font-size:12px;
+
+    color:#999;
+
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.help-card{
+
+    background:#fff;
+
+    border:1px solid #ececec;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:16px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+
+}
+
+.help-card h3{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
+.help-item{
+
+    font-size:13px;
+
+    color:#555;
+
+    line-height:1.7;
+
+    padding-bottom:16px;
+
+    margin-bottom:16px;
+
+    border-bottom:1px solid #f1f1f1;
+
+}
+
+.help-item:last-child{
+
+    margin-bottom:0;
+
+    padding-bottom:0;
+
+    border:none;
+
+}
+
+.version{
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#999;
+
+    margin-top:10px;
+
+}
+
+.success-card{
+
+    background:#eef9f1;
+
+    border-color:#dfeede;
+
+}
+
+.danger-card{
+
+    background:#fdf0f0;
+
+    border-color:#f3d9d9;
+
+}
+
+.warning-card{
+
+    background:#fff7e7;
+
+    border-color:#f5e6b7;
+
+}
+
+/* =========================
+   BADGE 입금완료,미입금
+========================= */
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:72px;
+
+    height:28px;
+
+    padding:0 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.badge.success{
+
+    background:#eaf8ea;
+
+    color:#2e9b43;
+
+}
+
+.badge.danger{
+
+    background:#fdecec;
+
+    color:#ef4444;
+
+}
+
+.badge.warning{
+
+    background:#fff6db;
+
+    color:#d9a400;
+
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.result-footer{
+
+    margin-top:26px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.download-btn{
+
+    width:380px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#4CAF50;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.home-btn{
+
+    width:380px;
+
+    height:42px;
+
+    border:1px solid #d8d8d8;
+
+    border-radius:8px;
+
+    background:#fff;
+
+    color:#444;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+.download-btn:hover,
+.home-btn:hover{
+
+    opacity:.96;
+
+}
+
+.product-col{
+
+    text-align:left !important;
+
+    max-width:260px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.amount-col{
+
+    text-align:right !important;
+
+    padding-right:16px !important;
+
+    font-variant-numeric:tabular-nums;
+
+}
