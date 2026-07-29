@@ -3,18 +3,18 @@
 # ====================================
 #
 # 역할
-# - MATCH 데이터만
-#   로젠 양식에 입력한다.
+# - match_only=True  : MATCH만 출력 (검수 결과)
+# - match_only=False : 모든 주문 출력 (직접 입력)
 #
 # 작성 : 김상민
-# 버전 : 0.0.3
+# 버전 : 0.0.4
 # ====================================
 
 from openpyxl import load_workbook
 from config import LOGEN_TEMPLATE
 
 
-def export_logen_excel(results, file_path):
+def export_logen_excel(results, file_path, match_only=True):
 
     # ------------------------
     # 로젠 원본 양식 불러오기
@@ -32,13 +32,17 @@ def export_logen_excel(results, file_path):
 
     for row in results:
 
-        if row["status"] != "MATCH":
+        # 검수 결과에서는 MATCH만 출력
+        if match_only and row.get("status") != "MATCH":
             continue
 
+        # 이름
+        name = row.get("nickname") or row.get("depositor", "")
+
         key = (
-            row["nickname"],
-            row["phone"],
-            row["address"]
+            name,
+            row.get("phone", ""),
+            row.get("address", "")
         )
 
         if key not in grouped:
@@ -58,22 +62,24 @@ def export_logen_excel(results, file_path):
 
     for row in grouped.values():
 
+        name = row.get("nickname") or row.get("depositor", "")
+
         # 품명 표시
         if row["count"] == 1:
-            product_name = row["product"]
+            product_name = row.get("product", "")
         else:
-            product_name = f'{row["product"]} 외 {row["count"] - 1}건'
+            product_name = f'{row.get("product", "")} 외 {row["count"] - 1}건'
 
-        ws[f"A{current_row}"] = row["nickname"]     # 이름
-        ws[f"B{current_row}"] = ""                  # 공란
-        ws[f"C{current_row}"] = row["address"]      # 주소
-        ws[f"D{current_row}"] = ""                  # 전화번호
-        ws[f"E{current_row}"] = row["phone"]        # 휴대폰
-        ws[f"F{current_row}"] = 1                   # 수량
-        ws[f"G{current_row}"] = ""                  # 운송료
-        ws[f"H{current_row}"] = "010"               # 선불
-        ws[f"I{current_row}"] = product_name        # 품명
-        ws[f"J{current_row}"] = ""                  # 공란
+        ws[f"A{current_row}"] = name
+        ws[f"B{current_row}"] = ""
+        ws[f"C{current_row}"] = row.get("address", "")
+        ws[f"D{current_row}"] = ""
+        ws[f"E{current_row}"] = row.get("phone", "")
+        ws[f"F{current_row}"] = 1
+        ws[f"G{current_row}"] = ""
+        ws[f"H{current_row}"] = "010"
+        ws[f"I{current_row}"] = product_name
+        ws[f"J{current_row}"] = ""
         ws[f"K{current_row}"] = "친절 빠른배송 부탁드립니다."
 
         current_row += 1

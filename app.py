@@ -10,6 +10,7 @@ from datetime import datetime
 from modules.group_preview import group_preview
 import shutil
 import time
+from modules.logen_exporter import export_logen_excel
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
@@ -126,9 +127,26 @@ def analyze():
                 output_file
             )
 
+            # -------------------------
+            # 로젠파일 저장
+            # -------------------------
+            logen_filename = datetime.now().strftime("%Y%m%d_%H%M%S_로젠택배.xlsx")
+
+            logen_file = os.path.join(
+                "output",
+                 logen_filename
+            )
+
+            export_logen_excel(
+                 orders,
+                 logen_file,
+                 match_only=False
+            )
+
             preview = group_preview(orders)
 
             session["result_file"] = output_file
+            session["logen_file"] = logen_file
 
             return render_template(
                 "result.html",
