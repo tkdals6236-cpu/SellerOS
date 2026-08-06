@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, session
+from flask import Flask, render_template, request, send_file, session, redirect
 import os
 from werkzeug.utils import secure_filename
 from modules.pipeline import run_pipeline
@@ -10,7 +10,11 @@ from datetime import datetime
 from modules.group_preview import group_preview
 import shutil
 import time
-from modules.logen_exporter import export_logen_excel
+from modules.preview_manager import get_preview
+from flask import jsonify
+
+ADMIN_ID = "admin"
+ADMIN_PW = "1234"
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
@@ -58,14 +62,205 @@ def clean_old_files():
 def home():
     return render_template("index.html")
 
-@app.route("/download/sample")
-def download_sample():
+@app.route("/panel_4d9a1f")
+def admin_login_page():
+    return render_template("admin_login.html")
 
-    return send_file(
-        "sample/sample.zip",
-        as_attachment=True
+@app.route("/panel_4d9a1f/home")
+def admin_home():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    return render_template("admin_home.html")
+
+@app.route("/logout")
+def logout():
+
+    session.pop("admin", None)
+
+    return redirect("/")
+
+@app.route("/file")
+def file_manager():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    folder = os.path.join("uploads", "files")
+
+    files = []
+
+    if os.path.exists(folder):
+
+        for filename in os.listdir(folder):
+
+            path = os.path.join(folder, filename)
+
+            display_name = filename
+
+            # 앞에 붙인 날짜 제거
+            if len(filename) > 16 and filename[15] == "_":
+                display_name = filename[16:]
+
+            files.append({
+
+                "name": filename,
+                "display": display_name,
+
+                "mtime": datetime.fromtimestamp(
+                    os.path.getmtime(path)
+                ).strftime("%Y-%m-%d %H:%M")
+
+            })
+
+        files.sort(
+            key=lambda x: x["mtime"],
+            reverse=True
+        )
+
+    return render_template(
+        "file_manager.html",
+        files=files
     )
 
+@app.route("/order")
+def order_manager():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    return render_template("order_manager.html")
+
+
+@app.route("/stock")
+def stock_manager():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    return render_template("stock_manager.html")
+
+
+@app.route("/client")
+def client_manager():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    return render_template("client_manager.html")
+
+
+@app.route("/settings")
+def settings():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    return render_template("settings.html")
+
+@app.route("/admin_auth", methods=["POST"])
+def admin_auth():
+
+    admin_id = request.form.get("admin_id")
+    admin_pw = request.form.get("admin_pw")
+
+    if admin_id == ADMIN_ID and admin_pw == ADMIN_PW:
+
+        session["admin"] = True
+
+        return redirect("/file")
+
+    return render_template(
+        "admin_login.html",
+        error="아이디 또는 비밀번호가 올바르지 않습니다."
+    )
+
+@app.route("/upload_file", methods=["POST"])
+def upload_file():
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    file = request.files.get("file")
+
+    if not file or file.filename == "":
+        return redirect("/file")
+
+    print("원본 파일명 :", file.filename)
+
+    import os
+    from datetime import datetime
+
+    filename = os.path.basename(file.filename)
+
+    # 같은 이름 방지
+    filename = (
+        datetime.now().strftime("%Y%m%d_%H%M%S_")
+        + filename
+    )
+
+    save_path = os.path.join(
+        "uploads",
+        "files",
+        filename
+    )
+
+    file.save(save_path)
+
+    return redirect("/file")
+
+@app.route("/uploads/files/<filename>")
+def uploaded_file(filename):
+
+    return send_file(
+        os.path.join(
+            "uploads",
+            "files",
+            filename
+        )
+    )
+
+@app.route("/delete_file/<filename>")
+def delete_file(filename):
+
+    if not session.get("admin"):
+        return redirect("/")
+
+    file_path = os.path.join(
+        "uploads",
+        "files",
+        filename
+    )
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    return redirect("/file")
+
+@app.route("/excel_preview/<path:filename>")
+def excel_preview(filename):
+
+    if not session.get("admin"):
+        return {}
+
+    import pandas as pd
+
+    file_path = os.path.join("uploads", "files", filename)
+
+    df = pd.read_excel(file_path)
+
+    df = df.head(20)
+
+    return df.to_html(index=False)
+
+@app.route("/preview/<path:filename>")
+def preview(filename):
+
+    if not session.get("admin"):
+        return jsonify({"error": "unauthorized"})
+
+    return jsonify(get_preview(filename))
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
@@ -127,26 +322,9 @@ def analyze():
                 output_file
             )
 
-            # -------------------------
-            # 로젠파일 저장
-            # -------------------------
-            logen_filename = datetime.now().strftime("%Y%m%d_%H%M%S_로젠택배.xlsx")
-
-            logen_file = os.path.join(
-                "output",
-                 logen_filename
-            )
-
-            export_logen_excel(
-                 orders,
-                 logen_file,
-                 match_only=False
-            )
-
             preview = group_preview(orders)
 
             session["result_file"] = output_file
-            session["logen_file"] = logen_file
 
             return render_template(
                 "result.html",

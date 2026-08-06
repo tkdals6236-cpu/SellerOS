@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>SellerOS</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>❌ 오류 발생</h1>
+
+    <div class="card">
+
+        <h3>{{ code }}</h3>
+
+        <p>{{ message }}</p>
+
+    </div>
+
+    <br>
+
+    <a href="/">
+        <button class="analyze-btn">
+            처음으로
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>

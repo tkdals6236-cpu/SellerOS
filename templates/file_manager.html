@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SellerOS 관리자</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>📁 파일관리</h1>
+
+        <div class="menu">
+
+            <a href="/file">파일관리</a>
+            <a href="/order">주문관리</a>
+            <a href="/stock">재고관리</a>
+            <a href="/settings">설정</a>
+            <a href="/logout">로그아웃</a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>📤 파일 업로드</h3>
+
+        <form
+            action="/upload_file"
+            method="POST"
+            enctype="multipart/form-data">
+
+            <input
+                type="file"
+                name="file">
+
+            <button type="submit">
+                업로드
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="content">
+
+        <div class="card file-list">
+
+            <h3>업로드된 파일</h3>
+
+            {% if files %}
+
+                {% for file in files %}
+
+                <div class="file-item">
+
+                    <button
+                        class="preview-btn"
+                        data-file="{{ file.name }}">
+
+                        <span class="file-icon">
+
+                            {% if file.name.lower().endswith(('.jpg','.jpeg','.png','.gif','.webp','.bmp')) %}
+                                🖼
+                            {% elif file.name.lower().endswith(('.xlsx','.xls','.csv')) %}
+                                📊
+                            {% elif file.name.lower().endswith('.txt') %}
+                                📝
+                            {% elif file.name.lower().endswith('.pdf') %}
+                                📄
+                            {% elif file.name.lower().endswith(('.mp4','.avi','.mov')) %}
+                                🎥
+                            {% else %}
+                                📁
+                            {% endif %}
+
+                        </span>
+
+                        <div class="file-info">
+
+                            <div class="file-name">
+
+                                {{ file.display }}
+
+                            </div>
+
+                            <div class="file-date">
+
+                                {{ file.mtime }}
+
+                            </div>
+
+                        </div>
+
+                    </button>
+
+                    <a
+                        href="/delete_file/{{ file.name }}"
+                        class="delete-btn"
+                        title="삭제"
+                        onclick="return confirm('정말 삭제하시겠습니까?')">
+
+                        ❌
+
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>업로드된 파일이 없습니다.</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="card preview">
+
+            <img id="previewImage">
+
+            <div id="excelPreview"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='file_manager.js') }}"></script>
+
+</body>
+
+</html>

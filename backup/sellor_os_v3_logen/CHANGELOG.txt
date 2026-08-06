@@ -1,0 +1,56 @@
+# SellerOS
+
+## v0.0.2
+
+### 추가
+- order_parser 완료
+- bank_parser 완료
+- matcher 완료
+
+### 개선
+- amount를 int로 저장
+- 전화번호 앞자리 0 유지(dtype=str)
+- 컬럼 자동 정리(clean_columns)
+
+### 다음 목표
+- validator.py
+- exporter.py
+
+Exporter를 하나로 두지 않는다.
+
+검수용 Exporter
+
+↓
+
+택배사별 Exporter
+
+로 분리한다.
+
+v0.0.2
+
+[추가]
+- config.py 추가
+- validator.py 추가
+- exporter.py 추가
+- 검수결과.xlsx 생성
+
+[변경]
+- 프로젝트 구조 개선
+- DEBUG 모드 적용
+
+[다음 목표]
+- 주문금액 컬럼 추가
+- 금액 비교
+- 로젠택배 Exporter
+
+v0.0.3
+
+- 검수 엑셀 개선
+- 확인 체크칸 추가
+- 비고 칸 추가
+- 상태 색상 적용
+- 입금완료 / 미입금 / 주문서없음 지원
+- 양방향 검수(MATCH / NO_PAYMENT / NO_ORDER) 구현
+- 컬럼 순서 및 정렬 개선
+
+

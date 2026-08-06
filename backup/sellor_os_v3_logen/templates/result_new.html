@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<title>SellerOS</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+{% if order_only %}
+
+주문목록 화면
+
+{% else %}
+
+<div class="page-layout">
+
+    <!-- ========================= -->
+    <!-- 왼쪽 -->
+    <!-- ========================= -->
+
+    <div class="left-panel">
+
+        <!-- Header -->
+
+        <div class="result-header">
+
+            <h1>✅ 검수가 완료되었습니다!</h1>
+
+            <p class="subtitle">
+
+                총 <b>{{ total }}</b>건의 주문을 검수했습니다.
+
+            </p>
+
+        </div>
+
+
+        <!-- Summary -->
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-number">{{ total }}</div>
+
+                <div class="summary-title">📦 총 주문</div>
+
+            </div>
+
+            <div class="summary-card success-card">
+
+                <div class="summary-number">{{ matched }}</div>
+
+                <div class="summary-title">🟢 입금완료</div>
+
+            </div>
+
+            <div class="summary-card danger-card">
+
+                <div class="summary-number">{{ unmatched }}</div>
+
+                <div class="summary-title">🔴 미입금</div>
+
+            </div>
+
+            <div class="summary-card warning-card">
+
+                <div class="summary-number">{{ no_order }}</div>
+
+                <div class="summary-title">🟡 주문서없음</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Preview -->
+
+        <div class="preview-card">
+
+            <div class="preview-header">
+
+                <h3>📋 검수결과 미리보기</h3>
+
+                <span>10 / {{ total }}</span>
+
+            </div>
+
+            <p class="preview-info">
+
+                상위 10건만 표시됩니다.
+
+            </p>
+
+
+            <table class="preview-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>No</th>
+
+                        <th>닉네임</th>
+
+                        <th>성함</th>
+
+                        <th>구매한 제품</th>
+
+                        <th>입금자명</th>
+
+                        <th>입금금액</th>
+
+                        <th>검수결과</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+{% for item in preview %}
+
+<tr>
+
+<td>{{ loop.index }}</td>
+
+<td>{{ item.nickname }}</td>
+
+<td>{{ item.depositor }}</td>
+
+<td>{{ item.product }}</td>
+
+<td>{{ item.bank_depositor or "-" }}</td>
+
+<td>
+
+{% if item.amount %}
+
+{{ "{:,}".format(item.amount|int) }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if item.status=="MATCH" %}
+
+<span class="badge success">입금완료</span>
+
+{% elif item.status=="NO_PAYMENT" %}
+
+<span class="badge danger">미입금</span>
+
+{% else %}
+
+<span class="badge warning">주문서없음</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <p class="preview-tip">
+
+                ※ 전체 주문목록은 다운로드하여 확인하세요.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- Footer -->
+
+        <div class="result-footer">
+
+            <a href="/download/result">
+
+                <button class="download-btn">
+
+                    📥 검수결과 다운로드
+
+                </button>
+
+            </a>
+
+            <a href="/">
+
+                <button class="home-btn">
+
+                    🏠 처음으로
+
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- 오른쪽 -->
+    <!-- ========================= -->
+
+    <div class="right-panel">
+
+        <div class="help-card">
+
+            <h3>📘 사용가이드</h3>
+
+        </div>
+
+        <div class="help-card">
+
+            <h3>💡 더 편리하게 사용하세요!</h3>
+
+        </div>
+
+        <div class="version">
+
+            SellerOS v0.4 Stable
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+</body>
+
+</html>
