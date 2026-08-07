@@ -260,21 +260,27 @@ body{
 
     .content{
 
-        flex-direction:column;
+        display:flex;
+
+        flex-direction:row;
+
+        gap:10px;
 
     }
 
     .file-list{
 
-        width:100%;
+        width:120px;
 
-        height:300px;
+        height:calc(100vh - 180px);
 
     }
 
     .preview{
 
-        height:400px;
+        flex:1;
+
+        height:calc(100vh - 180px);
 
     }
 
