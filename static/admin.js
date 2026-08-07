@@ -1,24 +1,31 @@
 const logo = document.getElementById("sellerLogo");
 
-let clickCount = 0;
-let timer = null;
+let pressTimer = null;
 
-logo.addEventListener("click", () => {
+// 길게 누르기 시작
+function startPress() {
 
-    clickCount++;
-
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-        clickCount = 0;
-    }, 2000);
-
-    if (clickCount >= 7) {
-
-        clickCount = 0;
+    pressTimer = setTimeout(() => {
 
         window.location.href = "/panel_4d9a1f";
 
-    }
+    }, 3000);
 
-});
+}
+
+// 손 떼면 취소
+function cancelPress() {
+
+    clearTimeout(pressTimer);
+
+}
+
+// PC
+logo.addEventListener("mousedown", startPress);
+logo.addEventListener("mouseup", cancelPress);
+logo.addEventListener("mouseleave", cancelPress);
+
+// 모바일
+logo.addEventListener("touchstart", startPress);
+logo.addEventListener("touchend", cancelPress);
+logo.addEventListener("touchcancel", cancelPress);
