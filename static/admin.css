@@ -331,3 +331,12 @@ body{
     }
 
 }
+
+.file-list{
+    width:50px !important;
+    background:red !important;
+}
+
+.preview{
+    background:blue !important;
+}
