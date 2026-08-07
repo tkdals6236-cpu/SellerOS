@@ -285,8 +285,8 @@ body{
 
     .file-list{
 
-        flex:0 0 90px;
-        width:90px;
+        flex:0 0 80px;
+        width:80px;
         height:calc(100vh - 170px);
 
     }
@@ -298,6 +298,12 @@ body{
 
     }
 
+    .file-title{
+
+        display:none;
+
+    }
+
     .file-item{
 
         margin-bottom:6px;
@@ -306,37 +312,23 @@ body{
 
     .preview-btn{
 
-        padding:6px;
-        gap:4px;
+        justify-content:center;
+        padding:8px 2px;
+        gap:0;
+
+    }
+
+    .file-info{
+
+        display:none;
 
     }
 
     .file-icon{
 
-        width:20px;
-        font-size:18px;
+        width:auto;
+        font-size:24px;
 
     }
 
-    .file-name{
-
-        display:none;
-
-    }
-
-    .file-date{
-
-        display:none;
-
-    }
-
-}
-
-.file-list{
-    width:50px !important;
-    background:red !important;
-}
-
-.preview{
-    background:blue !important;
 }
