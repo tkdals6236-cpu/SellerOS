@@ -265,36 +265,68 @@ body{
     .container{
 
         width:98%;
+        margin:8px auto;
 
-        margin:10px auto;
+    }
+
+    .card{
+
+        padding:8px;
 
     }
 
     .content{
 
-        display:grid;
-
-        grid-template-columns:90px minmax(0,1fr);
-
-        gap:8px;
+        display:flex;
+        flex-direction:row;
+        gap:6px;
 
     }
 
     .file-list{
 
-        width:auto;
-
-        min-width:0;
-
-        padding:8px;
+        flex:0 0 90px;
+        width:90px;
+        height:calc(100vh - 170px);
 
     }
 
     .preview{
 
-        min-width:0;
+        flex:1;
+        height:calc(100vh - 170px);
 
-        padding:8px;
+    }
+
+    .file-item{
+
+        margin-bottom:6px;
+
+    }
+
+    .preview-btn{
+
+        padding:6px;
+        gap:4px;
+
+    }
+
+    .file-icon{
+
+        width:20px;
+        font-size:18px;
+
+    }
+
+    .file-name{
+
+        display:none;
+
+    }
+
+    .file-date{
+
+        display:none;
 
     }
 
