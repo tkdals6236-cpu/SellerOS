@@ -260,28 +260,38 @@ body{
 
     .content{
 
-        display:flex;
+        display:grid;
 
-        flex-direction:row;
+        grid-template-columns:100px 1fr;
 
-        gap:10px;
+        gap:8px;
 
     }
 
     .file-list{
 
-        width:120px;
+        width:auto;
 
         height:calc(100vh - 180px);
+
+        min-width:0;
 
     }
 
     .preview{
 
-        flex:1;
+        min-width:0;
 
         height:calc(100vh - 180px);
 
     }
+    .card{
 
+        padding:10px;
+    }
+
+}
+
+body{
+    background:red !important;
 }
