@@ -14,7 +14,7 @@ from modules.preview_manager import get_preview
 from flask import jsonify
 
 ADMIN_ID = "admin"
-ADMIN_PW = "1234"
+ADMIN_PW = "1234!!"
 
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
