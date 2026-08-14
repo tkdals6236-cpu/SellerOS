@@ -913,268 +913,188 @@ body{
     min-height: 20px;
 }
 
+/* =========================================
+   모바일 전용 레이아웃
+   파일목록 → 위쪽
+   미리보기/엑셀 → 아래 전체
+========================================= */
 
-/* ================================
-   모바일 파일관리
-================================ */
+@media screen and (max-width: 768px) {
 
-@media (max-width:768px){
+    /* 전체 컨텐츠를 세로 배치 */
+    .content {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
 
-    .container{
-        width:98%;
-        margin:8px auto;
-    }
-
-    .card{
-        padding:8px;
-    }
-
-    /* 상단 메뉴 */
-    .menu{
-        margin-top:10px;
-        white-space:nowrap;
-        overflow-x:auto;
-    }
-
-    .menu a{
-        margin-right:10px;
-        font-size:12px;
+        width: 100% !important;
     }
 
 
-    /* 파일목록 + 미리보기 */
-    .content{
-        display:flex;
-        flex-direction:row;
-        gap:6px;
-        width:100%;
-        align-items:flex-start;
+    /* =====================================
+       위쪽 파일 선택 영역
+    ===================================== */
+
+    .file-list {
+
+        order: 1;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+
+        height: 58px !important;
+
+        padding: 5px !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        box-sizing: border-box !important;
     }
 
 
-    /* ================================
-       왼쪽 파일 목록
-       모바일에서는 아주 좁게
-    ================================= */
-
-    .file-list{
-        flex:0 0 95px !important;
-        width:95px !important;
-        min-width:95px !important;
-        max-width:95px !important;
-
-        height:calc(100vh - 170px);
-
-        padding:6px !important;
-
-        overflow-y:auto;
-        overflow-x:hidden;
+    /* 파일 제목은 숨김 */
+    .file-title {
+        display: none !important;
     }
 
-    .file-title{
-        display:none;
-    }
 
-    .file-item{
-        margin-bottom:6px;
-        width:100%;
+    /* 파일들을 가로로 나열 */
+    .file-list .file-item {
+
+        display: inline-flex !important;
+
+        width: auto !important;
+
+        margin: 0 4px 0 0 !important;
+
+        vertical-align: middle;
     }
 
 
     /* 파일 버튼 */
-    .preview-btn{
-        width:100%;
-        min-width:0;
+    .file-list .preview-btn {
 
-        justify-content:center;
+        width: 50px !important;
+        min-width: 50px !important;
+        height: 44px !important;
 
-        padding:8px 2px;
-        gap:0;
+        padding: 4px !important;
+
+        justify-content: center !important;
+
+        gap: 0 !important;
+
+        box-sizing: border-box !important;
     }
 
-    /* 모바일에서는 파일명/날짜 숨김 */
-    .file-info{
-        display:none;
+
+    /* 파일명/날짜 숨김 */
+    .file-list .file-info {
+        display: none !important;
     }
 
-    .file-icon{
-        width:auto;
-        font-size:22px;
+
+    /* 아이콘 */
+    .file-list .file-icon {
+
+        width: auto !important;
+
+        font-size: 22px !important;
     }
 
 
     /* 삭제 버튼 */
-    .delete-btn{
-        width:22px;
-        height:22px;
-        font-size:15px;
+    .file-list .delete-btn {
+
+        width: 20px !important;
+        height: 20px !important;
+
+        font-size: 14px !important;
     }
 
 
-    /* ================================
-       오른쪽 엑셀 영역
-       남은 공간 전부 사용
-    ================================= */
+    /* =====================================
+       아래쪽 미리보기 / 엑셀
+    ===================================== */
 
-    .preview{
-        flex:1 1 auto !important;
-        width:auto !important;
-        min-width:0 !important;
+    .preview {
 
-        height:calc(100vh - 170px);
+        order: 2;
 
-        padding:6px !important;
+        width: 100% !important;
 
-        overflow:hidden;
+        min-width: 0 !important;
+
+        max-width: none !important;
+
+        height: calc(100vh - 250px) !important;
+
+        padding: 6px !important;
+
+        box-sizing: border-box !important;
+
+        overflow: hidden !important;
     }
 
 
-    #previewImage{
-        width:100%;
-        height:100%;
-        object-fit:contain;
+    /* 이미지 */
+    #previewImage {
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: contain;
     }
 
 
-    #excelPreview{
-        width:100%;
-        max-width:100%;
-        max-height:calc(100vh - 220px);
+    /* 엑셀 영역 */
+    #excelPreview {
 
-        overflow:auto;
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        height: 100% !important;
+
+        max-height: none !important;
+
+        overflow: hidden !important;
     }
 
 
     /* 저장 버튼 */
-    #excelToolbar{
-        width:100%;
-        margin-bottom:6px;
+    #excelToolbar {
 
-        justify-content:flex-end;
-    }
-
-    #excelToolbar button{
-        padding:6px 10px;
-        font-size:12px;
-    }
-
-
-    /* 엑셀 */
-    .excel-wrapper{
-        width:100%;
-        max-width:100%;
-
-        max-height:calc(100vh - 220px);
-
-        border-radius:6px;
-    }
-
-    .editable-excel{
-        font-size:12px;
-    }
-
-    .editable-excel td,
-    .editable-excel th{
-        min-width:90px;
-    }
-
-
-    /* 행 번호 */
-    .excel-row-number,
-    .excel-corner{
-        width:35px !important;
-        min-width:35px !important;
-        max-width:35px !important;
-    }
-
-}
-
-@media screen and (max-width: 768px) {
-
-    .content {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 5px !important;
-    }
-
-    .file-list {
-        width: 80px !important;
-        min-width: 80px !important;
-        max-width: 80px !important;
-        flex: 0 0 80px !important;
-    }
-
-    .preview {
-        width: auto !important;
-        min-width: 0 !important;
-        flex: 1 1 auto !important;
-    }
-
-}
-
-@media screen and (max-width: 768px) {
-
-    .content {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 5px !important;
         width: 100% !important;
+
+        margin-bottom: 6px !important;
+
+        justify-content: flex-end !important;
     }
 
-    /* 왼쪽 파일 목록 */
-    .file-list {
+
+    #excelToolbar button {
+
+        padding: 6px 10px !important;
+
+        font-size: 12px !important;
+    }
+
+
+    /* 엑셀 스크롤 영역 */
+    .excel-wrapper {
+
+        width: 100% !important;
+
+        height: calc(100% - 42px) !important;
+
+        max-height: none !important;
+
+        overflow: auto !important;
+
         box-sizing: border-box !important;
-
-        flex: 0 0 95px !important;
-        width: 95px !important;
-        min-width: 95px !important;
-        max-width: 95px !important;
-
-        padding: 5px !important;
-    }
-
-    /* 파일 하나 */
-    .file-item {
-        width: 100% !important;
-        margin-bottom: 5px !important;
-    }
-
-    .preview-btn {
-        width: 100% !important;
-        min-width: 0 !important;
-        padding: 7px 2px !important;
-
-        justify-content: center !important;
-        gap: 0 !important;
-    }
-
-    /* 파일 이름/날짜 숨김 */
-    .file-info {
-        display: none !important;
-    }
-
-    .file-icon {
-        font-size: 22px !important;
-        width: auto !important;
-    }
-
-    /* 삭제 버튼 */
-    .delete-btn {
-        width: 20px !important;
-        height: 20px !important;
-        font-size: 15px !important;
-    }
-
-    /* 오른쪽 미리보기 */
-    .preview {
-        box-sizing: border-box !important;
-
-        flex: 1 1 auto !important;
-        width: auto !important;
-        min-width: 0 !important;
-        max-width: none !important;
-
-        padding: 6px !important;
     }
 
 }
