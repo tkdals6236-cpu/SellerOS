@@ -332,53 +332,57 @@ def save_excel():
             "error": "unauthorized"
         }), 401
 
-    import openpyxl
-
-    data = request.get_json()
-
-    filename = os.path.basename(
-        data.get("filename", "")
-    )
-
-    cells = data.get("cells", {})
-
-    if not filename:
-        return jsonify({
-            "error": "파일명이 없습니다."
-        }), 400
-
-    file_path = os.path.join(
-        "uploads",
-        "files",
-        filename
-    )
-
-    if not os.path.exists(file_path):
-        return jsonify({
-            "error": "파일을 찾을 수 없습니다."
-        }), 404
-
     try:
 
+        data = request.get_json()
+
+        filename = os.path.basename(
+            data.get("filename", "")
+        )
+
+        rows = data.get("data", [])
+
+        if not filename:
+            return jsonify({
+                "error": "파일명이 없습니다."
+            }), 400
+
+        file_path = os.path.join(
+            "uploads",
+            "files",
+            filename
+        )
+
+        if not os.path.exists(file_path):
+            return jsonify({
+                "error": "파일을 찾을 수 없습니다."
+            }), 404
+
+        if not filename.lower().endswith(".xlsx"):
+            return jsonify({
+                "error": "현재 XLSX 파일만 수정할 수 있습니다."
+            }), 400
+
+        # 기존 엑셀 열기
         workbook = openpyxl.load_workbook(
-            file_path,
-            data_only=False
+            file_path
         )
 
         sheet = workbook.active
 
-        for key, value in cells.items():
+        # 기존 데이터 전체 삭제
+        if sheet.max_row > 0:
+            sheet.delete_rows(
+                1,
+                sheet.max_row
+            )
 
-            row, col = key.split(":")
+        # 수정된 데이터 다시 입력
+        for row in rows:
 
-            row = int(row)
-            col = int(col)
+            sheet.append(row)
 
-            sheet.cell(
-                row=row,
-                column=col
-            ).value = value
-
+        # 저장
         workbook.save(file_path)
 
         return jsonify({
@@ -386,6 +390,11 @@ def save_excel():
         })
 
     except Exception as e:
+
+        print(
+            "엑셀 저장 오류:",
+            e
+        )
 
         return jsonify({
             "error": str(e)
