@@ -696,3 +696,263 @@ body{
     }
 
 }
+
+/* =================================================
+   엑셀 미리보기 레이아웃 수정
+================================================= */
+
+.preview {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+
+/* 저장 버튼 영역 */
+
+#excelToolbar {
+    flex: 0 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+
+/* 엑셀 영역 */
+
+#excelPreview {
+    flex: 1 1 auto;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    max-height: none;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* 실제 스크롤 영역 */
+
+.excel-wrapper {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+
+    overflow: auto;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d9dee7;
+    border-radius: 8px;
+
+    background: #fff;
+}
+
+
+/* 테이블 */
+
+.editable-excel {
+    width: max-content;
+    min-width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    font-size: 13px;
+}
+
+
+/* 컬럼 */
+
+.editable-excel thead th {
+    min-width: 120px;
+    width: 120px;
+
+    height: 34px;
+
+    padding: 0 8px;
+
+    background: #f3f5f7;
+
+    color: #444;
+
+    text-align: center;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 5;
+
+    box-sizing: border-box;
+}
+
+
+/* 행 */
+
+.editable-excel tbody tr {
+    height: 32px;
+}
+
+
+/* 셀 */
+
+.editable-excel td {
+    min-width: 120px;
+    width: 120px;
+
+    height: 32px;
+
+    padding: 5px 8px;
+
+    box-sizing: border-box;
+
+    background: #fff;
+
+    color: #333;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    outline: none;
+
+    cursor: text;
+}
+
+
+/* 행 번호 */
+
+.editable-excel .excel-row-number {
+    width: 45px !important;
+    min-width: 45px !important;
+    max-width: 45px !important;
+
+    height: 32px;
+
+    padding: 0 !important;
+
+    background: #f3f5f7;
+
+    color: #666;
+
+    text-align: center;
+
+    font-weight: normal;
+
+    position: sticky;
+    left: 0;
+
+    z-index: 4;
+}
+
+
+/* 왼쪽 위 모서리 */
+
+.editable-excel .excel-corner {
+    width: 45px !important;
+    min-width: 45px !important;
+    max-width: 45px !important;
+
+    position: sticky;
+
+    top: 0;
+    left: 0;
+
+    z-index: 10;
+
+    background: #e9edf2 !important;
+}
+
+
+/* 헤더 수정 가능 */
+
+.editable-excel .excel-header {
+    cursor: text;
+}
+
+
+/* 셀 마우스 오버 */
+
+.editable-excel td:hover {
+    background: #f8fbff;
+}
+
+
+/* 셀 수정 중 */
+
+.editable-excel td:focus,
+.editable-excel .excel-header:focus {
+    background: #fff;
+
+    outline: 2px solid #0d6efd;
+    outline-offset: -2px;
+}
+
+
+/* 빈 셀 */
+
+.editable-excel td:empty::after {
+    content: "";
+    display: block;
+    min-height: 20px;
+}
+
+
+/* =================================================
+   모바일
+================================================= */
+
+@media (max-width: 768px) {
+
+    .preview {
+        height: calc(100vh - 170px);
+
+        flex-direction: column;
+
+        align-items: stretch;
+        justify-content: flex-start;
+    }
+
+    #excelPreview {
+        width: 100%;
+        height: 100%;
+    }
+
+    .excel-wrapper {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+    }
+
+    .editable-excel {
+        font-size: 12px;
+    }
+
+    .editable-excel td,
+    .editable-excel thead th {
+        min-width: 100px;
+        width: 100px;
+    }
+
+    .editable-excel .excel-row-number,
+    .editable-excel .excel-corner {
+        width: 38px !important;
+        min-width: 38px !important;
+        max-width: 38px !important;
+    }
+
+}
