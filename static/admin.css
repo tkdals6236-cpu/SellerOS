@@ -332,3 +332,367 @@ body{
     }
 
 }
+
+/* ================================
+   엑셀 편집 화면
+================================ */
+
+#excelToolbar {
+
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+
+    margin-bottom:10px;
+
+}
+
+#excelToolbar button {
+
+    border:1px solid #d8dde5;
+    background:#fff;
+
+    border-radius:7px;
+
+    padding:7px 14px;
+
+    font-family:"맑은 고딕",sans-serif;
+    font-size:13px;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+#excelToolbar button:hover {
+
+    background:#f3f6fa;
+
+    border-color:#b8c2d0;
+
+}
+
+#saveExcelBtn {
+
+    background:#0d6efd !important;
+    color:#fff !important;
+
+    border-color:#0d6efd !important;
+
+    font-weight:600;
+
+}
+
+#saveExcelBtn:hover {
+
+    background:#0b5ed7 !important;
+
+}
+
+
+/* ================================
+   엑셀 스크롤 영역
+================================ */
+
+.excel-wrapper {
+
+    width:100%;
+
+    height:100%;
+
+    max-height:600px;
+
+    overflow:auto;
+
+    border:1px solid #d9dee7;
+
+    border-radius:8px;
+
+    background:#fff;
+
+}
+
+
+/* ================================
+   엑셀 테이블
+================================ */
+
+.editable-excel {
+
+    border-collapse:separate;
+
+    border-spacing:0;
+
+    min-width:max-content;
+
+    font-size:13px;
+
+    background:#fff;
+
+}
+
+
+/* 셀 */
+
+.editable-excel td,
+.editable-excel th {
+
+    border-right:1px solid #dfe3e8;
+
+    border-bottom:1px solid #dfe3e8;
+
+    padding:0;
+
+    height:30px;
+
+}
+
+
+/* ================================
+   열 머리글 A B C D
+================================ */
+
+.editable-excel thead th {
+
+    min-width:120px;
+
+    height:30px;
+
+    padding:0 8px;
+
+    background:#f3f5f7;
+
+    color:#555;
+
+    text-align:center;
+
+    font-weight:600;
+
+    user-select:none;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:5;
+
+}
+
+
+/* ================================
+   좌측 행 번호
+================================ */
+
+.excel-row-number {
+
+    width:45px !important;
+
+    min-width:45px !important;
+
+    max-width:45px !important;
+
+    padding:0 !important;
+
+    background:#f3f5f7;
+
+    color:#666;
+
+    text-align:center;
+
+    font-weight:normal;
+
+    user-select:none;
+
+    position:sticky;
+
+    left:0;
+
+    z-index:4;
+
+}
+
+
+/* 좌측 상단 모서리 */
+
+.excel-corner {
+
+    width:45px !important;
+
+    min-width:45px !important;
+
+    position:sticky;
+
+    top:0;
+
+    left:0;
+
+    z-index:10;
+
+    background:#e9edf2 !important;
+
+}
+
+
+/* ================================
+   실제 셀
+================================ */
+
+.editable-excel td {
+
+    min-width:120px;
+
+    max-width:400px;
+
+    padding:5px 8px;
+
+    background:#fff;
+
+    color:#333;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    outline:none;
+
+    cursor:text;
+
+}
+
+
+/* 셀에 마우스 올렸을 때 */
+
+.editable-excel td:hover {
+
+    background:#f8fbff;
+
+}
+
+
+/* 셀 수정 중 */
+
+.editable-excel td:focus {
+
+    background:#fff;
+
+    outline:2px solid #0d6efd;
+
+    outline-offset:-2px;
+
+}
+
+
+/* 선택된 셀 */
+
+.editable-excel td.selected-cell {
+
+    background:#eef5ff;
+
+}
+
+
+/* ================================
+   빈 셀도 엑셀처럼 보이게
+================================ */
+
+.editable-excel td:empty::after {
+
+    content:"";
+
+    display:block;
+
+    min-height:20px;
+
+}
+
+
+/* ================================
+   스크롤바
+================================ */
+
+.excel-wrapper::-webkit-scrollbar {
+
+    width:10px;
+    height:10px;
+
+}
+
+.excel-wrapper::-webkit-scrollbar-track {
+
+    background:#f1f3f5;
+
+}
+
+.excel-wrapper::-webkit-scrollbar-thumb {
+
+    background:#c5cbd3;
+
+    border-radius:5px;
+
+}
+
+.excel-wrapper::-webkit-scrollbar-thumb:hover {
+
+    background:#aeb6c1;
+
+}
+
+
+/* ================================
+   모바일
+================================ */
+
+@media (max-width:768px){
+
+    #excelToolbar {
+
+        justify-content:flex-end;
+
+        margin-bottom:6px;
+
+    }
+
+    #excelToolbar button {
+
+        padding:6px 10px;
+
+        font-size:12px;
+
+    }
+
+    .excel-wrapper {
+
+        max-height:calc(100vh - 220px);
+
+        border-radius:6px;
+
+    }
+
+    .editable-excel {
+
+        font-size:12px;
+
+    }
+
+    .editable-excel td,
+    .editable-excel th {
+
+        min-width:100px;
+
+    }
+
+    .excel-row-number,
+    .excel-corner {
+
+        width:38px !important;
+        min-width:38px !important;
+        max-width:38px !important;
+
+    }
+
+}
