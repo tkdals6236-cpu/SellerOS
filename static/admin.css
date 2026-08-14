@@ -1265,3 +1265,90 @@ body{
     }
 
 }
+
+/* =========================================
+   모바일 엑셀 열 너비 강제 조정
+========================================= */
+
+@media screen and (max-width: 768px) {
+
+    .excel-wrapper {
+        width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+    }
+
+    .editable-excel {
+
+        /* 테이블이 화면 너비만큼 강제로 늘어나지 않게 */
+        width: max-content !important;
+        min-width: 0 !important;
+
+        table-layout: fixed !important;
+
+        font-size: 11px !important;
+    }
+
+
+    /* 모든 셀 */
+    .editable-excel th,
+    .editable-excel td {
+
+        min-width: 65px !important;
+        width: 65px !important;
+        max-width: 65px !important;
+
+        padding: 2px 4px !important;
+
+        font-size: 11px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* 좌측 행번호 */
+    .editable-excel .excel-row-number,
+    .editable-excel .excel-corner {
+
+        min-width: 28px !important;
+        width: 28px !important;
+        max-width: 28px !important;
+
+        padding: 0 !important;
+    }
+
+
+    /* 제품명 */
+    .editable-excel th:nth-child(3),
+    .editable-excel td:nth-child(3) {
+
+        min-width: 75px !important;
+        width: 75px !important;
+        max-width: 75px !important;
+    }
+
+
+    /* 헤더 */
+    .editable-excel thead th {
+
+        min-width: 65px !important;
+        width: 65px !important;
+        max-width: 65px !important;
+
+        height: 28px !important;
+
+        padding: 2px 3px !important;
+
+        font-size: 11px !important;
+    }
+
+
+    /* 제품명 헤더도 동일하게 */
+    .editable-excel thead th:nth-child(3) {
+
+        min-width: 75px !important;
+        width: 75px !important;
+        max-width: 75px !important;
+    }
+
+}
