@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_file, session, redirect
 import os
+import openpyxl
 from werkzeug.utils import secure_filename
 from modules.pipeline import run_pipeline
 from modules.error_handler import SellerOSError
@@ -253,6 +254,136 @@ def excel_preview(filename):
     df = df.head(20)
 
     return df.to_html(index=False)
+
+@app.route("/excel_data/<path:filename>")
+def excel_data(filename):
+
+    if not session.get("admin"):
+        return jsonify({"error": "unauthorized"}), 401
+
+    import openpyxl
+
+    filename = os.path.basename(filename)
+
+    file_path = os.path.join(
+        "uploads",
+        "files",
+        filename
+    )
+
+    if not os.path.exists(file_path):
+        return jsonify({
+            "error": "파일을 찾을 수 없습니다."
+        }), 404
+
+    try:
+
+        workbook = openpyxl.load_workbook(
+            file_path,
+            data_only=False
+        )
+
+        sheet = workbook.active
+
+        cells = {}
+
+        for row in range(1, sheet.max_row + 1):
+
+            cells[row] = {}
+
+            for col in range(1, sheet.max_column + 1):
+
+                value = sheet.cell(
+                    row=row,
+                    column=col
+                ).value
+
+                if value is None:
+                    value = ""
+
+                cells[row][col] = str(value)
+
+        return jsonify({
+
+            "max_row": sheet.max_row,
+            "max_col": sheet.max_column,
+            "cells": cells
+
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 500
+
+
+@app.route("/save_excel", methods=["POST"])
+def save_excel():
+
+    if not session.get("admin"):
+        return jsonify({
+            "error": "unauthorized"
+        }), 401
+
+    import openpyxl
+
+    data = request.get_json()
+
+    filename = os.path.basename(
+        data.get("filename", "")
+    )
+
+    cells = data.get("cells", {})
+
+    if not filename:
+        return jsonify({
+            "error": "파일명이 없습니다."
+        }), 400
+
+    file_path = os.path.join(
+        "uploads",
+        "files",
+        filename
+    )
+
+    if not os.path.exists(file_path):
+        return jsonify({
+            "error": "파일을 찾을 수 없습니다."
+        }), 404
+
+    try:
+
+        workbook = openpyxl.load_workbook(
+            file_path,
+            data_only=False
+        )
+
+        sheet = workbook.active
+
+        for key, value in cells.items():
+
+            row, col = key.split(":")
+
+            row = int(row)
+            col = int(col)
+
+            sheet.cell(
+                row=row,
+                column=col
+            ).value = value
+
+        workbook.save(file_path)
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 @app.route("/preview/<path:filename>")
 def preview(filename):
