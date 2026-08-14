@@ -1352,3 +1352,44 @@ body{
     }
 
 }
+
+/* =========================================
+   모바일 - 파일 업로드 영역 압축
+========================================= */
+
+@media screen and (max-width: 768px) {
+
+    /* 업로드 카드 */
+    .container > .card {
+        padding: 8px 10px !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* 업로드 제목 */
+    .container > .card h3 {
+        margin: 4px 0 8px 0 !important;
+        font-size: 15px !important;
+    }
+
+    /* 업로드 폼 */
+    .container > .card form {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+
+        margin: 0 !important;
+    }
+
+    /* 파일 선택 */
+    .container > .card input[type="file"] {
+        font-size: 11px !important;
+        max-width: 230px !important;
+    }
+
+    /* 업로드 버튼 */
+    .container > .card button {
+        padding: 5px 10px !important;
+        font-size: 12px !important;
+    }
+
+}
