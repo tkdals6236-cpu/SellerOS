@@ -333,7 +333,7 @@ function renderExcel() {
     const displayRows =
         Math.max(
             realRows,
-            realRows + 10
+            30
         );
 
 
