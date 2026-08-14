@@ -245,6 +245,77 @@ def delete_file(filename):
 
     return redirect("/file")
 
+@app.route("/save_excel", methods=["POST"])
+def save_excel():
+
+    if not session.get("admin"):
+        return jsonify({
+            "error": "unauthorized"
+        }), 401
+
+    try:
+
+        data = request.get_json()
+
+        filename = data.get("filename")
+        rows = data.get("data")
+
+        if not filename or rows is None:
+            return jsonify({
+                "error": "잘못된 요청입니다."
+            }), 400
+
+        file_path = os.path.join(
+            "uploads",
+            "files",
+            filename
+        )
+
+        if not os.path.exists(file_path):
+            return jsonify({
+                "error": "파일을 찾을 수 없습니다."
+            }), 404
+
+        import openpyxl
+
+        # XLSX만 우선 지원
+        if not filename.lower().endswith(".xlsx"):
+            return jsonify({
+                "error": "현재 XLSX 파일만 수정할 수 있습니다."
+            }), 400
+
+        # 기존 엑셀 열기
+        wb = openpyxl.load_workbook(file_path)
+
+        ws = wb.active
+
+        # 기존 데이터 삭제
+        if ws.max_row > 0:
+            ws.delete_rows(
+                1,
+                ws.max_row
+            )
+
+        # 수정된 데이터 입력
+        for row in rows:
+
+            ws.append(row)
+
+        # 저장
+        wb.save(file_path)
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        print("엑셀 저장 오류:", e)
+
+        return jsonify({
+            "error": str(e)
+        }), 500
+
 @app.route("/excel_preview/<path:filename>")
 def excel_preview(filename):
 
