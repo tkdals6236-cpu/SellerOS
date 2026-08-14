@@ -20,6 +20,12 @@ ADMIN_PW = "1234!!"
 app = Flask(__name__)
 app.secret_key = "selleros_dev"
 
+os.makedirs("uploads/orders", exist_ok=True)
+os.makedirs("uploads/banks", exist_ok=True)
+os.makedirs("uploads/files", exist_ok=True)
+os.makedirs("output", exist_ok=True)
+
+
 
 def clean_old_files():
 
