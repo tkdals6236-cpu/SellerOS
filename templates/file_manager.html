@@ -1,633 +1,146 @@
-const preview = document.getElementById("previewImage");
-const excel = document.getElementById("excelPreview");
-const excelToolbar = document.getElementById("excelToolbar");
-const saveExcelBtn = document.getElementById("saveExcelBtn");
+<!DOCTYPE html>
+<html lang="ko">
 
-let currentExcelFile = null;
-let excelData = [];
-let selectedCell = null;
+<head>
 
+    <meta charset="UTF-8">
 
-// ===============================
-// 파일 선택
-// ===============================
+    <title>SellerOS 관리자</title>
 
-document.querySelectorAll(".preview-btn").forEach(btn => {
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin.css') }}">
 
-    btn.addEventListener("click", () => {
+</head>
 
-        document.querySelectorAll(".preview-btn").forEach(b => {
-            b.classList.remove("active");
-        });
+<body>
 
-        btn.classList.add("active");
+<div class="container">
 
-        document.querySelectorAll(".delete-btn").forEach(del => {
-            del.style.display = "none";
-        });
+    <div class="header">
 
-        btn.parentElement
-            .querySelector(".delete-btn")
-            .style.display = "inline-flex";
+        <h1>📁 파일관리</h1>
 
-        const file = btn.dataset.file;
-        const ext = file.split(".").pop().toLowerCase();
+        <div class="menu">
 
-        // 이미지
-        if (["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext)) {
+            <a href="/file">파일관리</a>
+            <a href="/order">주문관리</a>
+            <a href="/stock">재고관리</a>
+            <a href="/settings">설정</a>
+            <a href="/logout">로그아웃</a>
 
-            excelToolbar.style.display = "none";
-            excel.style.display = "none";
-            preview.style.display = "block";
+        </div>
 
-            preview.src =
-                "/uploads/files/" +
-                encodeURIComponent(file);
+    </div>
 
-            return;
-        }
+    <div class="card">
 
-        // 엑셀
-        if (["xlsx", "xls", "csv"].includes(ext)) {
+        <h3>📤 파일 업로드</h3>
 
-            preview.style.display = "none";
-            excel.style.display = "block";
-            excelToolbar.style.display = "block";
+        <form
+            action="/upload_file"
+            method="POST"
+            enctype="multipart/form-data">
 
-            currentExcelFile = file;
-            selectedCell = null;
+            <input
+                type="file"
+                name="file">
 
-            excel.innerHTML = "엑셀 불러오는 중...";
+            <button type="submit">
+                업로드
+            </button>
 
-            fetch(
-                "/excel_data/" +
-                encodeURIComponent(file)
-            )
-            .then(res => res.json())
-            .then(data => {
+        </form>
 
-                if (data.error) {
+    </div>
 
-                    excel.innerHTML =
-                        data.error;
+    <div class="content">
 
-                    return;
-                }
+        <div class="card file-list">
 
-                loadExcelData(data);
-                renderExcel();
+            <h3 class="file-title">업로드된 파일</h3>
 
-            })
-            .catch(err => {
+            {% if files %}
 
-                console.error(err);
+                {% for file in files %}
 
-                excel.innerHTML =
-                    "엑셀 파일을 불러오지 못했습니다.";
+                <div class="file-item">
 
-            });
-        }
+                    <button
+                        class="preview-btn"
+                        data-file="{{ file.name }}">
 
-    });
+                        <span class="file-icon">
 
-});
+                            {% if file.name.lower().endswith(('.jpg','.jpeg','.png','.gif','.webp','.bmp')) %}
+                                🖼
+                            {% elif file.name.lower().endswith(('.xlsx','.xls','.csv')) %}
+                                📊
+                            {% elif file.name.lower().endswith('.txt') %}
+                                📝
+                            {% elif file.name.lower().endswith('.pdf') %}
+                                📄
+                            {% elif file.name.lower().endswith(('.mp4','.avi','.mov')) %}
+                                🎥
+                            {% else %}
+                                📁
+                            {% endif %}
 
+                        </span>
 
-// ===============================
-// 데이터 변환
-// ===============================
+                        <div class="file-info">
 
-function loadExcelData(data) {
+                            <div class="file-name">
 
-    excelData = [];
+                                {{ file.display }}
 
-    for (let row = 1; row <= data.max_row; row++) {
+                            </div>
 
-        let rowData = [];
+                            <div class="file-date">
 
-        for (
-            let col = 1;
-            col <= data.max_col;
-            col++
-        ) {
+                                {{ file.mtime }}
 
-            rowData.push(
-                data.cells[row]?.[col] ?? ""
-            );
+                            </div>
 
-        }
+                        </div>
 
-        excelData.push(rowData);
-    }
-}
+                    </button>
 
+                    <a
+                        href="/delete_file/{{ file.name }}"
+                        class="delete-btn"
+                        title="삭제"
+                        onclick="return confirm('정말 삭제하시겠습니까?')">
 
-// ===============================
-// 엑셀 화면 만들기
-// ===============================
+                        ❌
 
-function renderExcel() {
+                    </a>
 
-    excel.innerHTML = "";
+                </div>
 
-    const wrapper =
-        document.createElement("div");
+                {% endfor %}
 
-    wrapper.className =
-        "excel-wrapper";
+            {% else %}
 
+                <p>업로드된 파일이 없습니다.</p>
 
-    const table =
-        document.createElement("table");
+            {% endif %}
 
-    table.className =
-        "editable-excel";
+        </div>
 
+        <div class="card preview">
 
-    // -------------------------------
-    // 헤더
-    // -------------------------------
+            <img id="previewImage">
 
-    const thead =
-        document.createElement("thead");
+            <div id="excelPreview"></div>
 
-    const headerRow =
-        document.createElement("tr");
+        </div>
 
+    </div>
 
-    // 좌측 모서리
-    const corner =
-        document.createElement("th");
+</div>
 
-    corner.className =
-        "excel-corner";
+<script src="{{ url_for('static', filename='file_manager.js') }}"></script>
 
-    headerRow.appendChild(corner);
+</body>
 
-
-    for (
-        let col = 0;
-        col < getMaxCols();
-        col++
-    ) {
-
-        const th =
-            document.createElement("th");
-
-        th.textContent =
-            columnName(col + 1);
-
-        th.dataset.col =
-            col;
-
-        th.addEventListener(
-            "click",
-            () => {
-
-                selectColumn(col);
-
-            }
-        );
-
-        headerRow.appendChild(th);
-    }
-
-    thead.appendChild(headerRow);
-
-    table.appendChild(thead);
-
-
-    // -------------------------------
-    // 데이터
-    // -------------------------------
-
-    const tbody =
-        document.createElement("tbody");
-
-
-    for (
-        let row = 0;
-        row < excelData.length;
-        row++
-    ) {
-
-        const tr =
-            document.createElement("tr");
-
-
-        // 행 번호
-        const rowNumber =
-            document.createElement("th");
-
-        rowNumber.textContent =
-            row + 1;
-
-        rowNumber.className =
-            "excel-row-number";
-
-        rowNumber.addEventListener(
-            "click",
-            () => {
-
-                selectRow(row);
-
-            }
-        );
-
-        tr.appendChild(rowNumber);
-
-
-        // 셀
-        for (
-            let col = 0;
-            col < getMaxCols();
-            col++
-        ) {
-
-            const td =
-                document.createElement("td");
-
-            td.contentEditable =
-                "true";
-
-            td.textContent =
-                excelData[row]?.[col] ?? "";
-
-            td.dataset.row =
-                row;
-
-            td.dataset.col =
-                col;
-
-
-            td.addEventListener(
-                "focus",
-                () => {
-
-                    selectedCell = {
-                        row: row,
-                        col: col
-                    };
-
-                    clearSelection();
-
-                    td.classList.add(
-                        "selected-cell"
-                    );
-
-                }
-            );
-
-
-            td.addEventListener(
-                "input",
-                () => {
-
-                    if (!excelData[row]) {
-                        excelData[row] = [];
-                    }
-
-                    excelData[row][col] =
-                        td.textContent;
-
-                }
-            );
-
-
-            tr.appendChild(td);
-
-        }
-
-        tbody.appendChild(tr);
-
-    }
-
-
-    table.appendChild(tbody);
-
-    wrapper.appendChild(table);
-
-    excel.appendChild(wrapper);
-
-}
-
-
-// ===============================
-// 행 추가
-// ===============================
-
-function addRow() {
-
-    const cols =
-        getMaxCols();
-
-    let newRow = [];
-
-    for (
-        let i = 0;
-        i < cols;
-        i++
-    ) {
-
-        newRow.push("");
-
-    }
-
-    excelData.push(newRow);
-
-    renderExcel();
-
-}
-
-
-// ===============================
-// 열 추가
-// ===============================
-
-function addColumn() {
-
-    for (
-        let row = 0;
-        row < excelData.length;
-        row++
-    ) {
-
-        if (!excelData[row]) {
-            excelData[row] = [];
-        }
-
-        excelData[row].push("");
-
-    }
-
-    renderExcel();
-
-}
-
-
-// ===============================
-// 행 삭제
-// ===============================
-
-function deleteRow() {
-
-    if (!selectedCell) {
-
-        alert(
-            "삭제할 행의 셀을 먼저 클릭해주세요."
-        );
-
-        return;
-    }
-
-    if (!confirm(
-        "선택한 행을 삭제하시겠습니까?"
-    )) {
-
-        return;
-    }
-
-    excelData.splice(
-        selectedCell.row,
-        1
-    );
-
-    selectedCell = null;
-
-    renderExcel();
-
-}
-
-
-// ===============================
-// 열 삭제
-// ===============================
-
-function deleteColumn() {
-
-    if (!selectedCell) {
-
-        alert(
-            "삭제할 열의 셀을 먼저 클릭해주세요."
-        );
-
-        return;
-    }
-
-    if (!confirm(
-        "선택한 열을 삭제하시겠습니까?"
-    )) {
-
-        return;
-    }
-
-
-    const col =
-        selectedCell.col;
-
-
-    for (
-        let row = 0;
-        row < excelData.length;
-        row++
-    ) {
-
-        excelData[row].splice(
-            col,
-            1
-        );
-
-    }
-
-    selectedCell = null;
-
-    renderExcel();
-
-}
-
-
-// ===============================
-// 최대 열 개수
-// ===============================
-
-function getMaxCols() {
-
-    let max = 1;
-
-    for (
-        const row of excelData
-    ) {
-
-        if (row.length > max) {
-            max = row.length;
-        }
-
-    }
-
-    return max;
-
-}
-
-
-// ===============================
-// 열 이름
-// ===============================
-
-function columnName(num) {
-
-    let name = "";
-
-    while (num > 0) {
-
-        const remainder =
-            (num - 1) % 26;
-
-        name =
-            String.fromCharCode(
-                65 + remainder
-            ) + name;
-
-        num =
-            Math.floor(
-                (num - 1) / 26
-            );
-
-    }
-
-    return name;
-
-}
-
-
-// ===============================
-// 선택 해제
-// ===============================
-
-function clearSelection() {
-
-    document
-        .querySelectorAll(
-            ".selected-cell"
-        )
-        .forEach(cell => {
-
-            cell.classList.remove(
-                "selected-cell"
-            );
-
-        });
-
-}
-
-
-// ===============================
-// 행 선택
-// ===============================
-
-function selectRow(row) {
-
-    selectedCell = {
-        row: row,
-        col: 0
-    };
-
-}
-
-
-// ===============================
-// 열 선택
-// ===============================
-
-function selectColumn(col) {
-
-    selectedCell = {
-        row: 0,
-        col: col
-    };
-
-}
-
-
-// ===============================
-// 저장
-// ===============================
-
-saveExcelBtn.addEventListener(
-    "click",
-    () => {
-
-        if (!currentExcelFile) {
-            return;
-        }
-
-
-        saveExcelBtn.disabled =
-            true;
-
-        saveExcelBtn.textContent =
-            "저장 중...";
-
-
-        fetch(
-            "/save_excel",
-            {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    filename:
-                        currentExcelFile,
-
-                    data:
-                        excelData
-
-                })
-
-            }
-        )
-        .then(res => res.json())
-        .then(data => {
-
-            if (data.success) {
-
-                alert(
-                    "엑셀 파일이 저장되었습니다."
-                );
-
-            } else {
-
-                alert(
-                    data.error ||
-                    "저장에 실패했습니다."
-                );
-
-            }
-
-        })
-        .catch(err => {
-
-            console.error(err);
-
-            alert(
-                "저장 중 오류가 발생했습니다."
-            );
-
-        })
-        .finally(() => {
-
-            saveExcelBtn.disabled =
-                false;
-
-            saveExcelBtn.textContent =
-                "💾 수정 내용 저장";
-
-        });
-
-    }
-);
+</html>
