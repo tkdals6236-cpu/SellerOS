@@ -1088,3 +1088,26 @@ body{
     }
 
 }
+
+@media screen and (max-width: 768px) {
+
+    .content {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 5px !important;
+    }
+
+    .file-list {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+        flex: 0 0 80px !important;
+    }
+
+    .preview {
+        width: auto !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+}
