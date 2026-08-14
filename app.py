@@ -48,7 +48,7 @@ def clean_old_files():
                 age = now - os.path.getmtime(file_path)
 
                 # 임시 파일은 30분(1800초) 지난 파일 삭제
-                if age > 5184000:
+                if age > 1800:
                     
                     os.remove(file_path)
 
