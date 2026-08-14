@@ -3,19 +3,23 @@ const excel = document.getElementById("excelPreview");
 
 let currentExcelFile = null;
 let excelData = [];
-let selectedCell = null;
 
+
+// =====================================================
 // 엑셀 저장 버튼
+// =====================================================
+
 const previewCard = excel.parentElement;
 
 const excelToolbar = document.createElement("div");
 
+excelToolbar.id = "excelToolbar";
 excelToolbar.style.display = "none";
 excelToolbar.style.marginBottom = "10px";
 
 excelToolbar.innerHTML = `
     <button id="saveExcelBtn">
-        💾 저장
+        💾 수정 내용 저장
     </button>
 `;
 
@@ -61,7 +65,10 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         // 이미지
         // =================================================
 
-        if (["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext)) {
+        if (
+            ["jpg", "jpeg", "png", "gif", "webp", "bmp"]
+                .includes(ext)
+        ) {
 
             excelToolbar.style.display = "none";
 
@@ -81,19 +88,21 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         // 엑셀
         // =================================================
 
-        if (["xlsx", "xls", "csv"].includes(ext)) {
+        if (
+            ["xlsx", "xls", "csv"]
+                .includes(ext)
+        ) {
 
             preview.style.display = "none";
 
             excel.style.display = "block";
 
-            excelToolbar.style.display = "block";
+            excelToolbar.style.display = "flex";
 
             currentExcelFile = file;
 
-            selectedCell = null;
-
-            excel.innerHTML = "엑셀 불러오는 중...";
+            excel.innerHTML =
+                "엑셀 불러오는 중...";
 
 
             fetch(
@@ -105,7 +114,8 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
 
                 if (data.error) {
 
-                    excel.innerHTML = data.error;
+                    excel.innerHTML =
+                        data.error;
 
                     return;
                 }
@@ -139,13 +149,27 @@ function loadExcelData(data) {
 
     excelData = [];
 
-    for (let row = 1; row <= data.max_row; row++) {
+
+    // 최소 8열
+    const maxCols =
+        Math.max(
+            data.max_col || 0,
+            8
+        );
+
+
+    for (
+        let row = 1;
+        row <= data.max_row;
+        row++
+    ) {
 
         let rowData = [];
 
+
         for (
             let col = 1;
-            col <= data.max_col;
+            col <= maxCols;
             col++
         ) {
 
@@ -155,8 +179,21 @@ function loadExcelData(data) {
 
         }
 
+
         excelData.push(rowData);
+
     }
+
+
+    // 데이터가 아예 없는 경우
+    if (excelData.length === 0) {
+
+        excelData.push(
+            Array(maxCols).fill("")
+        );
+
+    }
+
 }
 
 
@@ -168,52 +205,84 @@ function renderExcel() {
 
     excel.innerHTML = "";
 
-    const wrapper = document.createElement("div");
 
-    wrapper.className = "excel-wrapper";
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "excel-wrapper";
 
 
-    const table = document.createElement("table");
+    const table =
+        document.createElement("table");
 
-    table.className = "editable-excel";
+    table.className =
+        "editable-excel";
 
 
     // =================================================
     // 헤더
+    // 첫 번째 엑셀 행을 컬럼명으로 사용
     // =================================================
 
-    const thead = document.createElement("thead");
+    const thead =
+        document.createElement("thead");
 
-    const headerRow = document.createElement("tr");
+    const headerRow =
+        document.createElement("tr");
 
 
     // 좌측 모서리
-    const corner = document.createElement("th");
+    const corner =
+        document.createElement("th");
 
-    corner.className = "excel-corner";
+    corner.className =
+        "excel-corner";
 
     headerRow.appendChild(corner);
 
 
+    const columnCount =
+        getMaxCols();
+
+
     for (
         let col = 0;
-        col < getMaxCols();
+        col < columnCount;
         col++
     ) {
 
-        const th = document.createElement("th");
+        const th =
+            document.createElement("th");
 
+
+        // 실제 엑셀 첫 번째 행의 값
         th.textContent =
-            columnName(col + 1);
-
-        th.dataset.col = col;
+            excelData[0]?.[col] ?? "";
 
 
+        th.contentEditable =
+            "true";
+
+
+        th.dataset.col =
+            col;
+
+
+        // 컬럼명 수정
         th.addEventListener(
-            "click",
+            "input",
             () => {
 
-                selectColumn(col);
+                if (!excelData[0]) {
+
+                    excelData[0] = [];
+
+                }
+
+
+                excelData[0][col] =
+                    th.textContent;
 
             }
         );
@@ -231,38 +300,34 @@ function renderExcel() {
 
     // =================================================
     // 데이터
+    // 첫 번째 행은 컬럼명이므로 제외
     // =================================================
 
-    const tbody = document.createElement("tbody");
+    const tbody =
+        document.createElement("tbody");
 
 
     for (
-        let row = 0;
+        let row = 1;
         row < excelData.length;
         row++
     ) {
 
-        const tr = document.createElement("tr");
+        const tr =
+            document.createElement("tr");
 
 
-        // 행 번호
-        const rowNumber = document.createElement("th");
+        // 실제 엑셀 행 번호
+        const rowNumber =
+            document.createElement("th");
+
 
         rowNumber.textContent =
             row + 1;
 
+
         rowNumber.className =
             "excel-row-number";
-
-
-        rowNumber.addEventListener(
-            "click",
-            () => {
-
-                selectRow(row);
-
-            }
-        );
 
 
         tr.appendChild(rowNumber);
@@ -271,48 +336,41 @@ function renderExcel() {
         // 셀
         for (
             let col = 0;
-            col < getMaxCols();
+            col < columnCount;
             col++
         ) {
 
-            const td = document.createElement("td");
+            const td =
+                document.createElement("td");
 
-            td.contentEditable = "true";
+
+            td.contentEditable =
+                "true";
+
 
             td.textContent =
                 excelData[row]?.[col] ?? "";
 
-            td.dataset.row = row;
 
-            td.dataset.col = col;
-
-
-            td.addEventListener(
-                "focus",
-                () => {
-
-                    selectedCell = {
-                        row: row,
-                        col: col
-                    };
-
-                    clearSelection();
-
-                    td.classList.add(
-                        "selected-cell"
-                    );
-
-                }
-            );
+            td.dataset.row =
+                row;
 
 
+            td.dataset.col =
+                col;
+
+
+            // 셀 수정
             td.addEventListener(
                 "input",
                 () => {
 
                     if (!excelData[row]) {
+
                         excelData[row] = [];
+
                     }
+
 
                     excelData[row][col] =
                         td.textContent;
@@ -341,159 +399,29 @@ function renderExcel() {
 
 
 // =====================================================
-// 행 추가
-// =====================================================
-
-function addRow() {
-
-    const cols = getMaxCols();
-
-    let newRow = [];
-
-    for (
-        let i = 0;
-        i < cols;
-        i++
-    ) {
-
-        newRow.push("");
-
-    }
-
-    excelData.push(newRow);
-
-    renderExcel();
-
-}
-
-
-// =====================================================
-// 열 추가
-// =====================================================
-
-function addColumn() {
-
-    for (
-        let row = 0;
-        row < excelData.length;
-        row++
-    ) {
-
-        if (!excelData[row]) {
-            excelData[row] = [];
-        }
-
-        excelData[row].push("");
-
-    }
-
-    renderExcel();
-
-}
-
-
-// =====================================================
-// 행 삭제
-// =====================================================
-
-function deleteRow() {
-
-    if (!selectedCell) {
-
-        alert(
-            "삭제할 행의 셀을 먼저 클릭해주세요."
-        );
-
-        return;
-    }
-
-
-    if (!confirm(
-        "선택한 행을 삭제하시겠습니까?"
-    )) {
-
-        return;
-    }
-
-
-    excelData.splice(
-        selectedCell.row,
-        1
-    );
-
-    selectedCell = null;
-
-    renderExcel();
-
-}
-
-
-// =====================================================
-// 열 삭제
-// =====================================================
-
-function deleteColumn() {
-
-    if (!selectedCell) {
-
-        alert(
-            "삭제할 열의 셀을 먼저 클릭해주세요."
-        );
-
-        return;
-    }
-
-
-    if (!confirm(
-        "선택한 열을 삭제하시겠습니까?"
-    )) {
-
-        return;
-    }
-
-
-    const col =
-        selectedCell.col;
-
-
-    for (
-        let row = 0;
-        row < excelData.length;
-        row++
-    ) {
-
-        excelData[row].splice(
-            col,
-            1
-        );
-
-    }
-
-
-    selectedCell = null;
-
-    renderExcel();
-
-}
-
-
-// =====================================================
 // 최대 열 개수
 // =====================================================
 
 function getMaxCols() {
 
-    let max = 1;
+    let max = 8;
+
 
     for (
         const row of excelData
     ) {
 
-        if (row.length > max) {
+        if (
+            row &&
+            row.length > max
+        ) {
+
             max = row.length;
+
         }
 
     }
+
 
     return max;
 
@@ -501,85 +429,7 @@ function getMaxCols() {
 
 
 // =====================================================
-// 열 이름
-// =====================================================
-
-function columnName(num) {
-
-    let name = "";
-
-    while (num > 0) {
-
-        const remainder =
-            (num - 1) % 26;
-
-        name =
-            String.fromCharCode(
-                65 + remainder
-            ) + name;
-
-        num =
-            Math.floor(
-                (num - 1) / 26
-            );
-
-    }
-
-    return name;
-
-}
-
-
-// =====================================================
-// 선택 해제
-// =====================================================
-
-function clearSelection() {
-
-    document
-        .querySelectorAll(
-            ".selected-cell"
-        )
-        .forEach(cell => {
-
-            cell.classList.remove(
-                "selected-cell"
-            );
-
-        });
-
-}
-
-
-// =====================================================
-// 행 선택
-// =====================================================
-
-function selectRow(row) {
-
-    selectedCell = {
-        row: row,
-        col: 0
-    };
-
-}
-
-
-// =====================================================
-// 열 선택
-// =====================================================
-
-function selectColumn(col) {
-
-    selectedCell = {
-        row: 0,
-        col: col
-    };
-
-}
-
-// =====================================================
-// 저장
+// 엑셀 저장
 // =====================================================
 
 document
@@ -589,7 +439,9 @@ document
         () => {
 
             if (!currentExcelFile) {
+
                 return;
+
             }
 
 
@@ -599,7 +451,9 @@ document
                 );
 
 
-            saveButton.disabled = true;
+            saveButton.disabled =
+                true;
+
 
             saveButton.textContent =
                 "저장 중...";
@@ -612,8 +466,10 @@ document
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body: JSON.stringify({
@@ -658,7 +514,8 @@ document
             })
             .finally(() => {
 
-                saveButton.disabled = false;
+                saveButton.disabled =
+                    false;
 
                 saveButton.textContent =
                     "💾 수정 내용 저장";
