@@ -5,6 +5,25 @@ let currentExcelFile = null;
 let excelData = [];
 let selectedCell = null;
 
+// 엑셀 저장 버튼
+const previewCard = excel.parentElement;
+
+const excelToolbar = document.createElement("div");
+
+excelToolbar.style.display = "none";
+excelToolbar.style.marginBottom = "10px";
+
+excelToolbar.innerHTML = `
+    <button id="saveExcelBtn">
+        💾 저장
+    </button>
+`;
+
+previewCard.insertBefore(
+    excelToolbar,
+    excel
+);
+
 
 // =====================================================
 // 파일 선택
