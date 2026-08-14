@@ -6,6 +6,22 @@ let excelData = [];
 
 
 // =====================================================
+// 엑셀 헤더
+// =====================================================
+
+let excelHeaders = [
+    "날짜",
+    "제품명",
+    "단가",
+    "수량",
+    "재고",
+    "입고일",
+    "거래처",
+    "비고"
+];
+
+
+// =====================================================
 // 엑셀 저장 버튼
 // =====================================================
 
@@ -14,6 +30,7 @@ const previewCard = excel.parentElement;
 const excelToolbar = document.createElement("div");
 
 excelToolbar.id = "excelToolbar";
+
 excelToolbar.style.display = "none";
 excelToolbar.style.marginBottom = "10px";
 
@@ -97,7 +114,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
 
             excel.style.display = "block";
 
-            excelToolbar.style.display = "flex";
+            excelToolbar.style.display = "block";
 
             currentExcelFile = file;
 
@@ -158,6 +175,7 @@ function loadExcelData(data) {
         );
 
 
+    // 실제 엑셀 데이터 전부 유지
     for (
         let row = 1;
         row <= data.max_row;
@@ -206,6 +224,7 @@ function renderExcel() {
     excel.innerHTML = "";
 
 
+    // 바깥 스크롤 영역
     const wrapper =
         document.createElement("div");
 
@@ -222,7 +241,6 @@ function renderExcel() {
 
     // =================================================
     // 헤더
-    // 첫 번째 엑셀 행을 컬럼명으로 사용
     // =================================================
 
     const thead =
@@ -232,12 +250,15 @@ function renderExcel() {
         document.createElement("tr");
 
 
-    // 좌측 모서리
+    // 왼쪽 모서리
     const corner =
         document.createElement("th");
 
     corner.className =
         "excel-corner";
+
+    corner.textContent =
+        "";
 
     headerRow.appendChild(corner);
 
@@ -246,6 +267,7 @@ function renderExcel() {
         getMaxCols();
 
 
+    // 컬럼 헤더
     for (
         let col = 0;
         col < columnCount;
@@ -256,11 +278,12 @@ function renderExcel() {
             document.createElement("th");
 
 
-        // 실제 엑셀 첫 번째 행의 값
+        // 기본 헤더
         th.textContent =
-            excelData[0]?.[col] ?? "";
+            excelHeaders[col] || "";
 
 
+        // 헤더 수정 가능
         th.contentEditable =
             "true";
 
@@ -269,19 +292,16 @@ function renderExcel() {
             col;
 
 
-        // 컬럼명 수정
+        th.className =
+            "excel-header";
+
+
+        // 헤더 수정
         th.addEventListener(
             "input",
             () => {
 
-                if (!excelData[0]) {
-
-                    excelData[0] = [];
-
-                }
-
-
-                excelData[0][col] =
+                excelHeaders[col] =
                     th.textContent;
 
             }
@@ -300,16 +320,26 @@ function renderExcel() {
 
     // =================================================
     // 데이터
-    // 첫 번째 행은 컬럼명이므로 제외
     // =================================================
 
     const tbody =
         document.createElement("tbody");
 
 
+    // 실제 데이터 + 빈 행 10줄
+    const realRows =
+        excelData.length;
+
+    const displayRows =
+        Math.max(
+            realRows,
+            realRows + 10
+        );
+
+
     for (
-        let row = 1;
-        row < excelData.length;
+        let row = 0;
+        row < displayRows;
         row++
     ) {
 
@@ -317,7 +347,10 @@ function renderExcel() {
             document.createElement("tr");
 
 
-        // 실제 엑셀 행 번호
+        // =================================================
+        // 행 번호
+        // =================================================
+
         const rowNumber =
             document.createElement("th");
 
@@ -333,7 +366,10 @@ function renderExcel() {
         tr.appendChild(rowNumber);
 
 
+        // =================================================
         // 셀
+        // =================================================
+
         for (
             let col = 0;
             col < columnCount;
@@ -348,8 +384,8 @@ function renderExcel() {
                 "true";
 
 
-            td.textContent =
-                excelData[row]?.[col] ?? "";
+            td.className =
+                "excel-cell";
 
 
             td.dataset.row =
@@ -360,14 +396,47 @@ function renderExcel() {
                 col;
 
 
+            // 실제 데이터가 있으면 표시
+            if (
+                excelData[row] &&
+                excelData[row][col] !== undefined
+            ) {
+
+                td.textContent =
+                    excelData[row][col];
+
+            } else {
+
+                td.textContent =
+                    "";
+
+            }
+
+
+            // =================================================
             // 셀 수정
+            // =================================================
+
             td.addEventListener(
                 "input",
                 () => {
 
+                    // 새 행이면 배열 생성
                     if (!excelData[row]) {
 
-                        excelData[row] = [];
+                        excelData[row] =
+                            Array(columnCount).fill("");
+
+                    }
+
+
+                    // 새 열이 부족하면 확장
+                    while (
+                        excelData[row].length <
+                        columnCount
+                    ) {
+
+                        excelData[row].push("");
 
                     }
 
