@@ -7,29 +7,6 @@ let selectedCell = null;
 
 
 // =====================================================
-// 엑셀 편집 툴바 자동 생성
-// =====================================================
-
-const previewCard = excel.parentElement;
-
-const excelToolbar = document.createElement("div");
-
-excelToolbar.id = "excelToolbar";
-excelToolbar.style.display = "none";
-excelToolbar.style.marginBottom = "10px";
-
-excelToolbar.innerHTML = `
-    <button id="addRowBtn">➕ 행 추가</button>
-    <button id="addColumnBtn">➕ 열 추가</button>
-    <button id="deleteRowBtn">🗑️ 행 삭제</button>
-    <button id="deleteColumnBtn">🗑️ 열 삭제</button>
-    <button id="saveExcelBtn">💾 수정 내용 저장</button>
-`;
-
-previewCard.insertBefore(excelToolbar, excel);
-
-
-// =====================================================
 // 파일 선택
 // =====================================================
 
@@ -581,43 +558,6 @@ function selectColumn(col) {
     };
 
 }
-
-
-// =====================================================
-// 버튼 연결
-// =====================================================
-
-document
-    .getElementById("addRowBtn")
-    .addEventListener(
-        "click",
-        addRow
-    );
-
-
-document
-    .getElementById("addColumnBtn")
-    .addEventListener(
-        "click",
-        addColumn
-    );
-
-
-document
-    .getElementById("deleteRowBtn")
-    .addEventListener(
-        "click",
-        deleteRow
-    );
-
-
-document
-    .getElementById("deleteColumnBtn")
-    .addEventListener(
-        "click",
-        deleteColumn
-    );
-
 
 // =====================================================
 // 저장
