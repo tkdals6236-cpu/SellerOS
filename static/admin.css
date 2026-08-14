@@ -914,47 +914,177 @@ body{
 }
 
 
-/* =================================================
-   모바일
-================================================= */
+/* ================================
+   모바일 파일관리
+================================ */
 
-@media (max-width: 768px) {
+@media (max-width:768px){
 
-    .preview {
-        height: calc(100vh - 170px);
-
-        flex-direction: column;
-
-        align-items: stretch;
-        justify-content: flex-start;
+    .container{
+        width:98%;
+        margin:8px auto;
     }
 
-    #excelPreview {
-        width: 100%;
-        height: 100%;
+    .card{
+        padding:8px;
     }
 
-    .excel-wrapper {
-        width: 100%;
-        height: 100%;
-        max-height: none;
+    /* 상단 메뉴 */
+    .menu{
+        margin-top:10px;
+        white-space:nowrap;
+        overflow-x:auto;
     }
 
-    .editable-excel {
-        font-size: 12px;
+    .menu a{
+        margin-right:10px;
+        font-size:12px;
+    }
+
+
+    /* 파일목록 + 미리보기 */
+    .content{
+        display:flex;
+        flex-direction:row;
+        gap:6px;
+        width:100%;
+        align-items:flex-start;
+    }
+
+
+    /* ================================
+       왼쪽 파일 목록
+       모바일에서는 아주 좁게
+    ================================= */
+
+    .file-list{
+        flex:0 0 95px !important;
+        width:95px !important;
+        min-width:95px !important;
+        max-width:95px !important;
+
+        height:calc(100vh - 170px);
+
+        padding:6px !important;
+
+        overflow-y:auto;
+        overflow-x:hidden;
+    }
+
+    .file-title{
+        display:none;
+    }
+
+    .file-item{
+        margin-bottom:6px;
+        width:100%;
+    }
+
+
+    /* 파일 버튼 */
+    .preview-btn{
+        width:100%;
+        min-width:0;
+
+        justify-content:center;
+
+        padding:8px 2px;
+        gap:0;
+    }
+
+    /* 모바일에서는 파일명/날짜 숨김 */
+    .file-info{
+        display:none;
+    }
+
+    .file-icon{
+        width:auto;
+        font-size:22px;
+    }
+
+
+    /* 삭제 버튼 */
+    .delete-btn{
+        width:22px;
+        height:22px;
+        font-size:15px;
+    }
+
+
+    /* ================================
+       오른쪽 엑셀 영역
+       남은 공간 전부 사용
+    ================================= */
+
+    .preview{
+        flex:1 1 auto !important;
+        width:auto !important;
+        min-width:0 !important;
+
+        height:calc(100vh - 170px);
+
+        padding:6px !important;
+
+        overflow:hidden;
+    }
+
+
+    #previewImage{
+        width:100%;
+        height:100%;
+        object-fit:contain;
+    }
+
+
+    #excelPreview{
+        width:100%;
+        max-width:100%;
+        max-height:calc(100vh - 220px);
+
+        overflow:auto;
+    }
+
+
+    /* 저장 버튼 */
+    #excelToolbar{
+        width:100%;
+        margin-bottom:6px;
+
+        justify-content:flex-end;
+    }
+
+    #excelToolbar button{
+        padding:6px 10px;
+        font-size:12px;
+    }
+
+
+    /* 엑셀 */
+    .excel-wrapper{
+        width:100%;
+        max-width:100%;
+
+        max-height:calc(100vh - 220px);
+
+        border-radius:6px;
+    }
+
+    .editable-excel{
+        font-size:12px;
     }
 
     .editable-excel td,
-    .editable-excel thead th {
-        min-width: 100px;
-        width: 100px;
+    .editable-excel th{
+        min-width:90px;
     }
 
-    .editable-excel .excel-row-number,
-    .editable-excel .excel-corner {
-        width: 38px !important;
-        min-width: 38px !important;
-        max-width: 38px !important;
+
+    /* 행 번호 */
+    .excel-row-number,
+    .excel-corner{
+        width:35px !important;
+        min-width:35px !important;
+        max-width:35px !important;
     }
 
 }
