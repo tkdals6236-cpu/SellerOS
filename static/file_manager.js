@@ -235,16 +235,19 @@ function loadExcelData(data) {
             excelData[row].push("");
         }
 
-        // 입고수량 기본값 0
-        if (
-            excelData[row][3] === null ||
-            excelData[row][3] === undefined ||
-            excelData[row][3] === ""
-        ) {
+        // 제품명이 있는 행만 입고수량 기본값 0
+const productName = String(excelData[row][0] || "").trim();
 
-            excelData[row][3] = "0";
-
-        }
+if (
+    productName !== "" &&
+    (
+        excelData[row][3] === null ||
+        excelData[row][3] === undefined ||
+        excelData[row][3] === ""
+    )
+) {
+    excelData[row][3] = "0";
+}
 
     }
 
@@ -491,22 +494,19 @@ function renderExcel() {
             }
 
 
-            // 입고수량 기본값
-            if (
-                col === 3 &&
-                (
-                    value === null ||
-                    value === undefined ||
-                    value === ""
-                )
-            ) {
-
-                value = "0";
-
-                excelData[row][col] =
-                    "0";
-
-            }
+            // 제품명이 있는 행만 입고수량 기본값 0
+if (
+    col === 3 &&
+    String(excelData[row][0] || "").trim() !== "" &&
+    (
+        value === null ||
+        value === undefined ||
+        value === ""
+    )
+) {
+    value = "0";
+    excelData[row][col] = "0";
+}
 
 
             // 숫자 컬럼 처음 표시할 때 콤마
