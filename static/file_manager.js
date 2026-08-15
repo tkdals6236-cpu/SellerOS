@@ -68,9 +68,12 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
 
 
         // 선택한 파일 삭제 버튼만 표시
-        btn.parentElement
-            .querySelector(".delete-btn")
-            .style.display = "inline-flex";
+        const deleteBtn =
+            btn.parentElement.querySelector(".delete-btn");
+
+        if (deleteBtn) {
+            deleteBtn.style.display = "inline-flex";
+        }
 
 
         const file = btn.dataset.file;
