@@ -269,7 +269,9 @@ def excel_preview(filename):
 def excel_data(filename):
 
     if not session.get("admin"):
-        return jsonify({"error": "unauthorized"}), 401
+        return jsonify({
+            "error": "unauthorized"
+        }), 401
 
     import openpyxl
 
@@ -297,29 +299,144 @@ def excel_data(filename):
 
         cells = {}
 
-        for row in range(1, sheet.max_row + 1):
+
+        # =================================================
+        # 실제 엑셀 열 구조 확인
+        #
+        # 기존 구조:
+        # 1 제품명
+        # 2 단가
+        # 3 예비입고
+        # 4 입고수량
+        # 5 재고
+        # 6 판매수량
+        # 7 판매금액
+        # 8 비고
+        #
+        # 새 구조:
+        # 1 제품명
+        # 2 단가
+        # 3 입고수량
+        # 4 재고
+        # 5 판매수량
+        # 6 판매금액
+        # 7 비고
+        # 8 메모
+        # =================================================
+
+
+        for row in range(
+            1,
+            sheet.max_row + 1
+        ):
 
             cells[row] = {}
 
-            for col in range(1, sheet.max_column + 1):
 
-                value = sheet.cell(
-                    row=row,
-                    column=col
-                ).value
+            # =================================================
+            # 일반 상품 행
+            # =================================================
 
-                if value is None:
-                    value = ""
+            if row <= 48:
 
-                cells[row][col] = str(value)
+                old_values = []
+
+                for col in range(
+                    1,
+                    9
+                ):
+
+                    value = sheet.cell(
+                        row=row,
+                        column=col
+                    ).value
+
+                    if value is None:
+                        value = ""
+
+                    old_values.append(
+                        str(value)
+                    )
+
+
+                # =================================================
+                # 기존 → 새 구조 변환
+                # =================================================
+
+                new_values = [
+
+                    old_values[0],  # 제품명
+
+                    old_values[1],  # 단가
+
+                    old_values[3],  # 입고수량
+
+                    old_values[4],  # 재고
+
+                    old_values[5],  # 판매수량
+
+                    old_values[6],  # 판매금액
+
+                    old_values[7],  # 비고
+
+                    ""              # 메모
+
+                ]
+
+
+                for col in range(
+                    1,
+                    9
+                ):
+
+                    cells[row][col] =
+                        new_values[col - 1]
+
+
+            else:
+
+                # =================================================
+                # 49행 / 50행
+                #
+                # 합계행과 재고금액행은 기존 구조 그대로 읽음
+                # =================================================
+
+                for col in range(
+                    1,
+                    max(
+                        sheet.max_column,
+                        8
+                    ) + 1
+                ):
+
+                    value = sheet.cell(
+                        row=row,
+                        column=col
+                    ).value
+
+                    if value is None:
+                        value = ""
+
+                    cells[row][col] =
+                        str(value)
+
 
         return jsonify({
 
-            "max_row": sheet.max_row,
-            "max_col": sheet.max_column,
-            "cells": cells
+            "max_row":
+                sheet.max_row,
+
+            "max_col":
+                max(
+                    sheet.max_column,
+                    8
+                ),
+
+            "cells":
+                cells
 
         })
+
 
     except Exception as e:
 
