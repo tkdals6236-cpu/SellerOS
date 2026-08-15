@@ -860,11 +860,26 @@ if (
 
                 }
             );
-            tr.appendChild(td);
-       
-           }
+                        tr.appendChild(td);
+
         }
+
     }
+
+    // =================================================
+    // 표를 화면에 붙이기
+    // =================================================
+
+    table.appendChild(tbody);
+
+    wrapper.appendChild(table);
+
+    excel.appendChild(wrapper);
+
+    // 49행 / 50행 계산 표시
+    updateSummaryRow();
+
+}
 // =====================================================
 // 49행
 //
