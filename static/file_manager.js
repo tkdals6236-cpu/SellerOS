@@ -248,6 +248,35 @@ if (
 ) {
     excelData[row][3] = "0";
 }
+        // 불필요한 0 제거
+if (productName === "") {
+
+    for (let col = 1; col <= 6; col++) {
+        excelData[row][col] = "";
+    }
+
+} else {
+
+    // 제품이 있는 행도 입고수량 외의 0은 빈칸
+    for (let col of [1, 2, 4, 5, 6]) {
+
+        if (
+            String(excelData[row][col]).trim() === "0"
+        ) {
+            excelData[row][col] = "";
+        }
+
+    }
+
+    // 입고수량은 항상 0
+    if (
+        excelData[row][3] === "" ||
+        excelData[row][3] === null ||
+        excelData[row][3] === undefined
+    ) {
+        excelData[row][3] = "0";
+    }
+}
 
     }
 
