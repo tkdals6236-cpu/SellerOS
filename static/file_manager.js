@@ -72,7 +72,20 @@ document
 
         }
     );
+// =====================================================
+// 정산완료 버튼
+// =====================================================
 
+document
+    .getElementById("completeSettlementBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            completeSettlement();
+
+        }
+    );
 
 // =====================================================
 // 파일 선택
@@ -1681,6 +1694,174 @@ function confirmIncomingStock() {
     // =================================================
 
     updateSummaryRow();
+
+}
+
+// =====================================================
+// 정산완료
+//
+// 현재 재고는 그대로 유지
+// 판매수량 / 판매금액 / 합계금액 / 잔액 초기화
+// =====================================================
+
+function completeSettlement() {
+
+    // =================================================
+    // 1~48행 판매수량 / 판매금액 초기화
+    // =================================================
+
+    for (
+        let row = 0;
+        row < 48;
+        row++
+    ) {
+
+        if (
+            !excelData[row]
+        ) {
+            continue;
+        }
+
+
+        // 판매수량
+        // E열 = col 4
+        excelData[row][4] =
+            "";
+
+
+        // 판매금액
+        // F열 = col 5
+        excelData[row][5] =
+            "";
+
+
+        // =================================================
+        // 화면의 판매수량 셀 초기화
+        // =================================================
+
+        const salesQtyCell =
+            document.querySelector(
+                `td[data-row="${row}"][data-col="4"]`
+            );
+
+        if (
+            salesQtyCell
+        ) {
+
+            salesQtyCell.textContent =
+                "";
+
+        }
+
+
+        // =================================================
+        // 화면의 판매금액 셀 초기화
+        // =================================================
+
+        const salesAmountCell =
+            document.querySelector(
+                `td[data-row="${row}"][data-col="5"]`
+            );
+
+        if (
+            salesAmountCell
+        ) {
+
+            salesAmountCell.textContent =
+                "";
+
+        }
+
+    }
+
+
+    // =================================================
+    // 49행 초기화
+    //
+    // B열 = 합계금액
+    // D열 = 입금액
+    // F열 = 잔액
+    // =================================================
+
+    excelData[48][1] =
+        "";
+
+    excelData[48][3] =
+        "";
+
+    excelData[48][5] =
+        "";
+
+
+    // 화면의 합계금액
+    const totalCell =
+        document.querySelector(
+            'td[data-row="48"][data-col="1"]'
+        );
+
+    if (
+        totalCell
+    ) {
+
+        totalCell.textContent =
+            "";
+
+    }
+
+
+    // 화면의 입금액
+    const depositCell =
+        document.querySelector(
+            'td[data-row="48"][data-col="3"]'
+        );
+
+    if (
+        depositCell
+    ) {
+
+        depositCell.textContent =
+            "";
+
+    }
+
+
+    // 화면의 잔액
+    const balanceCell =
+        document.querySelector(
+            'td[data-row="48"][data-col="5"]'
+        );
+
+    if (
+        balanceCell
+    ) {
+
+        balanceCell.textContent =
+            "";
+
+    }
+
+
+    // =================================================
+    // 재고금액은 다시 계산
+    //
+    // ★ 재고 자체는 절대 변경하지 않음
+    // =================================================
+
+    const stockCell =
+        document.querySelector(
+            'td[data-row="49"][data-col="1"]'
+        );
+
+    if (
+        stockCell
+    ) {
+
+        stockCell.textContent =
+            formatNumber(
+                calculateStockTotal()
+            );
+
+    }
 
 }
 
