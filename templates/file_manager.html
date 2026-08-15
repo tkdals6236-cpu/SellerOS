@@ -107,7 +107,7 @@
                         </div>
 
                     </button>
-
+                    {% if file.name != "엑셀.xlsx" %}
                     <a
                         href="/delete_file/{{ file.name }}"
                         class="delete-btn"
