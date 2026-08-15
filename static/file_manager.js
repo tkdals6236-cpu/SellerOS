@@ -581,6 +581,22 @@ if (
             // 셀 수정
             // =================================================
 
+            // 판매수량 수정 전 기존 수량 기억
+            td.addEventListener(
+                "focus",
+                () => {
+
+                    if (col === 5) {
+
+                        td.dataset.oldSalesQty =
+                            excelData[row][5] || "";
+
+                    }
+
+                }
+            );
+
+
             td.addEventListener(
                 "input",
                 () => {
@@ -606,26 +622,29 @@ if (
                     excelData[row][col] =
                         td.textContent;
 
+
                     // 제품명을 새로 입력하면 입고수량을 0으로 표시
-if (
-    col === 0 &&
-    td.textContent.trim() !== "" &&
-    !excelData[row][3]
-) {
+                    if (
+                        col === 0 &&
+                        td.textContent.trim() !== "" &&
+                        !excelData[row][3]
+                    ) {
 
-    excelData[row][3] = "0";
+                        excelData[row][3] = "0";
 
-    const inputCell =
-        document.querySelector(
-            `td[data-row="${row}"][data-col="3"]`
-        );
+                        const inputCell =
+                            document.querySelector(
+                                `td[data-row="${row}"][data-col="3"]`
+                            );
 
-    if (inputCell) {
-        inputCell.textContent = "0";
-    }
-}
+                        if (inputCell) {
 
+                            inputCell.textContent =
+                                "0";
 
+                        }
+
+                    }
 
 
                     // 단가 또는 판매수량 변경
@@ -642,79 +661,208 @@ if (
 
                 }
             );
-        // 숫자 입력이 끝났을 때만 콤마 적용
-    td.addEventListener("blur", () => {
 
-        const numericCols = [
-            1, 2, 3, 4, 5, 6
-        ];
 
-        if (!numericCols.includes(col)) {
-            return;
-        }
+            // =================================================
+            // 숫자 입력이 끝났을 때만 처리
+            // =================================================
 
-        const rawValue =
-    td.textContent.trim();
+            td.addEventListener(
+                "blur",
+                () => {
 
-// 빈칸이면 0으로 바꾸지 않음
-if (rawValue === "") {
+                    const numericCols = [
+                        1, 2, 3, 4, 5, 6
+                    ];
 
-    excelData[row][col] = "";
 
-    return;
-}
+                    if (
+                        !numericCols.includes(col)
+                    ) {
 
-const number =
-    parseNumber(rawValue);
+                        return;
 
-if (!isNaN(number)) {
+                    }
 
-    const formatted =
-        formatNumber(number);
 
-    td.textContent =
-        formatted;
+                    const rawValue =
+                        td.textContent.trim();
 
-    excelData[row][col] =
-        formatted;
-}
 
-        if (
-            col === 1 ||
-            col === 5
-        ) {
+                    // =================================================
+                    // 빈칸 처리
+                    // =================================================
 
-            updateSalesAmount(row);
+                    if (rawValue === "") {
 
-        }
+                        excelData[row][col] =
+                            "";
 
-        updateSummaryRow();
 
-    });
-  
+                        // 판매수량을 지운 경우
+                        if (col === 5) {
+
+                            const oldSalesQty =
+                                parseNumber(
+                                    td.dataset.oldSalesQty || ""
+                                );
+
+
+                            const currentStock =
+                                parseNumber(
+                                    excelData[row][4]
+                                );
+
+
+                            const newStock =
+                                currentStock +
+                                oldSalesQty;
+
+
+                            excelData[row][4] =
+                                formatNumber(
+                                    newStock
+                                );
+
+
+                            const stockCell =
+                                document.querySelector(
+                                    `td[data-row="${row}"][data-col="4"]`
+                                );
+
+
+                            if (stockCell) {
+
+                                stockCell.textContent =
+                                    formatNumber(
+                                        newStock
+                                    );
+
+                            }
+
+
+                            updateSalesAmount(
+                                row
+                            );
+
+                        }
+
+
+                        updateSummaryRow();
+
+                        return;
+
+                    }
+
+
+                    // =================================================
+                    // 숫자 콤마 처리
+                    // =================================================
+
+                    const number =
+                        parseNumber(
+                            rawValue
+                        );
+
+
+                    if (!isNaN(number)) {
+
+                        const formatted =
+                            formatNumber(
+                                number
+                            );
+
+
+                        td.textContent =
+                            formatted;
+
+
+                        excelData[row][col] =
+                            formatted;
+
+                    }
+
+
+                    // =================================================
+                    // 판매수량 변경 → 재고수량 조정
+                    // =================================================
+
+                    if (col === 5) {
+
+                        const oldSalesQty =
+                            parseNumber(
+                                td.dataset.oldSalesQty || ""
+                            );
+
+
+                        const newSalesQty =
+                            parseNumber(
+                                td.textContent
+                            );
+
+
+                        const currentStock =
+                            parseNumber(
+                                excelData[row][4]
+                            );
+
+
+                        const newStock =
+                            currentStock +
+                            oldSalesQty -
+                            newSalesQty;
+
+
+                        excelData[row][4] =
+                            formatNumber(
+                                newStock
+                            );
+
+
+                        const stockCell =
+                            document.querySelector(
+                                `td[data-row="${row}"][data-col="4"]`
+                            );
+
+
+                        if (stockCell) {
+
+                            stockCell.textContent =
+                                formatNumber(
+                                    newStock
+                                );
+
+                        }
+
+
+                        // 판매금액 다시 계산
+                        updateSalesAmount(
+                            row
+                        );
+
+                    }
+
+
+                    // =================================================
+                    // 단가 변경 → 판매금액 다시 계산
+                    // =================================================
+
+                    if (col === 1) {
+
+                        updateSalesAmount(
+                            row
+                        );
+
+                    }
+
+
+                    updateSummaryRow();
+
+                }
+            );
             tr.appendChild(td);
 
         }
-
-
-        tbody.appendChild(tr);
-
-    }
-
-
-    table.appendChild(tbody);
-
-    wrapper.appendChild(table);
-
-    excel.appendChild(wrapper);
-
-
-    // 49행 계산 표시
-    updateSummaryRow();
-
-}
-
-
 // =====================================================
 // 49행
 //
