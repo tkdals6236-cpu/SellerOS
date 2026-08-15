@@ -821,10 +821,21 @@ td.addEventListener(
     "blur",
     () => {
 
+        const rawValue =
+            td.textContent.trim();
+
+        // 빈칸이면 빈칸 그대로 유지
+        if (rawValue === "") {
+
+            excelData[48][3] = "";
+
+            updateSummaryRow();
+
+            return;
+        }
+
         const amount =
-            parseNumber(
-                td.textContent
-            );
+            parseNumber(rawValue);
 
         if (!isNaN(amount)) {
 
@@ -1009,49 +1020,69 @@ function formatNumber(value) {
 function updateSalesAmount(row) {
 
     if (!excelData[row]) {
-
         return;
-
     }
 
+    const productName =
+        String(excelData[row][0] || "").trim();
 
-    const price =
-        parseNumber(
-            excelData[row][1]
-        );
+    const priceRaw =
+        String(excelData[row][1] || "").trim();
 
-
-    const salesQty =
-        parseNumber(
-            excelData[row][5]
-        );
-
-
-    const salesAmount =
-        price * salesQty;
-
-
-    excelData[row][6] =
-        formatNumber(
-            salesAmount
-        );
-
+    const salesQtyRaw =
+        String(excelData[row][5] || "").trim();
 
     const cell =
         document.querySelector(
             `td[data-row="${row}"][data-col="6"]`
         );
 
+    // 제품명이 없으면 판매금액도 빈칸
+    if (productName === "") {
 
-    if (cell) {
+        excelData[row][6] = "";
 
-        cell.textContent =
-            formatNumber(
-                salesAmount
-            );
+        if (cell) {
+            cell.textContent = "";
+        }
 
+        return;
     }
 
+    // 단가 또는 판매수량이 비어 있으면 판매금액도 빈칸
+    if (
+        priceRaw === "" ||
+        salesQtyRaw === ""
+    ) {
+
+        excelData[row][6] = "";
+
+        if (cell) {
+            cell.textContent = "";
+        }
+
+        return;
+    }
+
+    const price =
+        parseNumber(priceRaw);
+
+    const salesQty =
+        parseNumber(salesQtyRaw);
+
+    const salesAmount =
+        price * salesQty;
+
+    const formatted =
+        formatNumber(salesAmount);
+
+    excelData[row][6] =
+        formatted;
+
+    if (cell) {
+        cell.textContent =
+            formatted;
+    }
 }
 
 
