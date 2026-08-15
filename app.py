@@ -389,8 +389,7 @@ def excel_data(filename):
                     9
                 ):
 
-                    cells[row][col] =
-                        new_values[col - 1]
+                    cells[row][col] = new_values[col - 1]
 
 
             else:
@@ -417,8 +416,7 @@ def excel_data(filename):
                     if value is None:
                         value = ""
 
-                    cells[row][col] =
-                        str(value)
+                    cells[row][col] = str(value)
 
 
         return jsonify({
