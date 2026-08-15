@@ -653,20 +653,31 @@ if (
             return;
         }
 
-        const number =
-            parseNumber(td.textContent);
+        const rawValue =
+    td.textContent.trim();
 
-        if (!isNaN(number)) {
+// 빈칸이면 0으로 바꾸지 않음
+if (rawValue === "") {
 
-            const formatted =
-                formatNumber(number);
+    excelData[row][col] = "";
 
-            td.textContent =
-                formatted;
+    return;
+}
 
-            excelData[row][col] =
-                formatted;
-        }
+const number =
+    parseNumber(rawValue);
+
+if (!isNaN(number)) {
+
+    const formatted =
+        formatNumber(number);
+
+    td.textContent =
+        formatted;
+
+    excelData[row][col] =
+        formatted;
+}
 
         if (
             col === 1 ||
