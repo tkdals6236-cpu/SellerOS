@@ -566,10 +566,11 @@ def save_excel():
 
                 if len(row49) > 3:
 
-                    deposit_amount =
+                    deposit_amount = (
                         to_number(
                             row49[3]
                         )
+                    )
 
 
         # =================================================
