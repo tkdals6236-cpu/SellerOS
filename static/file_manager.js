@@ -12,12 +12,12 @@ let excelData = [];
 let excelHeaders = [
     "제품명",
     "단가",
-    "예비입고",
     "입고수량",
     "재고",
     "판매수량",
     "판매금액",
-    "비고"
+    "비고",
+    "메모"
 ];
 
 
@@ -154,7 +154,6 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
 
 });
 
-
 // =====================================================
 // 데이터 변환
 // =====================================================
@@ -163,10 +162,12 @@ function loadExcelData(data) {
 
     excelData = [];
 
-    const maxCols = Math.max(
-        data.max_col || 0,
-        8
-    );
+
+    const maxCols =
+        Math.max(
+            data.max_col || 0,
+            8
+        );
 
 
     // 실제 데이터 전부 유지
@@ -177,6 +178,7 @@ function loadExcelData(data) {
     ) {
 
         let rowData = [];
+
 
         for (
             let col = 1;
@@ -190,18 +192,28 @@ function loadExcelData(data) {
 
         }
 
+
         // 최소 8열
-        while (rowData.length < 8) {
+        while (
+            rowData.length < 8
+        ) {
+
             rowData.push("");
+
         }
 
-        excelData.push(rowData);
+
+        excelData.push(
+            rowData
+        );
 
     }
 
 
     // 데이터가 아예 없는 경우
-    if (excelData.length === 0) {
+    if (
+        excelData.length === 0
+    ) {
 
         excelData.push(
             Array(8).fill("")
@@ -211,7 +223,9 @@ function loadExcelData(data) {
 
 
     // 최소 50행 데이터 배열 확보
-    while (excelData.length < 50) {
+    while (
+        excelData.length < 50
+    ) {
 
         excelData.push(
             Array(8).fill("")
@@ -224,96 +238,102 @@ function loadExcelData(data) {
     // 1~48행 상품 데이터 기본값
     // =================================================
 
-    for (let row = 0; row < 48; row++) {
+    for (
+        let row = 0;
+        row < 48;
+        row++
+    ) {
 
         if (!excelData[row]) {
+
             excelData[row] =
                 Array(8).fill("");
+
         }
 
-        while (excelData[row].length < 8) {
+
+        while (
+            excelData[row].length < 8
+        ) {
+
             excelData[row].push("");
+
         }
 
-        // 제품명이 있는 행만 입고수량 기본값 0
-const productName = String(excelData[row][0] || "").trim();
 
-if (
-    productName !== "" &&
-    (
-        excelData[row][3] === null ||
-        excelData[row][3] === undefined ||
-        excelData[row][3] === ""
-    )
-) {
-    excelData[row][3] = "0";
-}
-        // 불필요한 0 제거
-if (productName === "") {
+        // =================================================
+        // 제품명
+        // =================================================
 
-    for (let col = 1; col <= 6; col++) {
-        excelData[row][col] = "";
-    }
+        const productName =
+            String(
+                excelData[row][0] || ""
+            ).trim();
 
-} else {
 
-    // 제품이 있는 행도 입고수량 외의 0은 빈칸
-    for (let col of [1, 2, 4, 5, 6]) {
+        // =================================================
+        // 제품명이 없는 행
+        // =================================================
 
         if (
-            String(excelData[row][col]).trim() === "0"
+            productName === ""
         ) {
-            excelData[row][col] = "";
+
+            for (
+                let col = 1;
+                col <= 7;
+                col++
+            ) {
+
+                excelData[row][col] =
+                    "";
+
+            }
+
+            continue;
+
+        }
+
+
+        // =================================================
+        // 입고수량
+        //
+        // 제품명이 있어도 자동으로 0을 넣지 않음
+        // =================================================
+
+        // 입고수량 = col 2
+        //
+        // 빈칸이면 그대로 유지
+
+
+        // =================================================
+        // 숫자 데이터의 불필요한 0 제거
+        //
+        // 입고수량도 이제 빈칸 허용
+        // =================================================
+
+        for (
+            let col of [
+                1, 2, 3, 4, 5
+            ]
+        ) {
+
+            if (
+                String(
+                    excelData[row][col]
+                ).trim() === "0"
+            ) {
+
+                excelData[row][col] =
+                    "";
+
+            }
+
         }
 
     }
 
-    // 입고수량은 항상 0
-    if (
-        excelData[row][3] === "" ||
-        excelData[row][3] === null ||
-        excelData[row][3] === undefined
-    ) {
-        excelData[row][3] = "0";
-    }
 }
-
-    } //
-
-
-    // =================================================
-    // 49행
-    // =================================================
-
-    if (!excelData[48]) {
-
-        excelData[48] =
-            Array(8).fill("");
-
-    }
-
-    while (excelData[48].length < 8) {
-        excelData[48].push("");
-    }
-
-
-    // =================================================
-    // 50행
-    // =================================================
-
-    if (!excelData[49]) {
-
-        excelData[49] =
-            Array(8).fill("");
-
-    }
-
-    while (excelData[49].length < 8) {
-        excelData[49].push("");
-    }
-
-}
-
 
 // =====================================================
 // 엑셀 화면 만들기
@@ -523,41 +543,39 @@ function renderExcel() {
             }
 
 
-            // 제품명이 있는 행만 입고수량 기본값 0
-if (
-    col === 3 &&
-    String(excelData[row][0] || "").trim() !== "" &&
-    (
-        value === null ||
-        value === undefined ||
-        value === ""
-    )
-) {
-    value = "0";
-    excelData[row][col] = "0";
-}
+            // =================================================
+            // 숫자 컬럼
+            //
+            // 1 = 단가
+            // 2 = 입고수량
+            // 3 = 재고
+            // 4 = 판매수량
+            // 5 = 판매금액
+            // =================================================
 
+            if (
+                [1, 2, 3, 4, 5]
+                    .includes(col)
+            ) {
 
-// 숫자 컬럼 처음 표시할 때 콤마
-if (
-    [1, 2, 3, 4, 5, 6]
-        .includes(col)
-) {
+                const number =
+                    parseNumber(value);
 
-    const number =
-        parseNumber(value);
+                if (
+                    value !== ""
+                ) {
 
-    if (value !== "") {
+                    value =
+                        formatNumber(
+                            number
+                        );
 
-        value =
-            formatNumber(number);
+                    excelData[row][col] =
+                        value;
 
-        excelData[row][col] =
-            value;
+                }
 
-    }
-
-}
+            }
 
 
             td.textContent =
@@ -568,7 +586,9 @@ if (
             // 판매금액은 자동 계산
             // =================================================
 
-            if (col === 6) {
+            if (
+                col === 5
+            ) {
 
                 updateSalesAmount(
                     row
@@ -586,10 +606,12 @@ if (
                 "focus",
                 () => {
 
-                    if (col === 5) {
+                    if (
+                        col === 4
+                    ) {
 
                         td.dataset.oldSalesQty =
-                            excelData[row][5] || "";
+                            excelData[row][4] || "";
 
                     }
 
@@ -601,7 +623,9 @@ if (
                 "input",
                 () => {
 
-                    if (!excelData[row]) {
+                    if (
+                        !excelData[row]
+                    ) {
 
                         excelData[row] =
                             Array(8).fill("");
@@ -623,34 +647,10 @@ if (
                         td.textContent;
 
 
-                    // 제품명을 새로 입력하면 입고수량을 0으로 표시
-                    if (
-                        col === 0 &&
-                        td.textContent.trim() !== "" &&
-                        !excelData[row][3]
-                    ) {
-
-                        excelData[row][3] = "0";
-
-                        const inputCell =
-                            document.querySelector(
-                                `td[data-row="${row}"][data-col="3"]`
-                            );
-
-                        if (inputCell) {
-
-                            inputCell.textContent =
-                                "0";
-
-                        }
-
-                    }
-
-
                     // 단가 또는 판매수량 변경
                     if (
                         col === 1 ||
-                        col === 5
+                        col === 4
                     ) {
 
                         updateSalesAmount(
@@ -672,7 +672,7 @@ if (
                 () => {
 
                     const numericCols = [
-                        1, 2, 3, 4, 5, 6
+                        1, 2, 3, 4, 5
                     ];
 
 
@@ -693,14 +693,18 @@ if (
                     // 빈칸 처리
                     // =================================================
 
-                    if (rawValue === "") {
+                    if (
+                        rawValue === ""
+                    ) {
 
                         excelData[row][col] =
                             "";
 
 
                         // 판매수량을 지운 경우
-                        if (col === 5) {
+                        if (
+                            col === 4
+                        ) {
 
                             const oldSalesQty =
                                 parseNumber(
@@ -710,7 +714,7 @@ if (
 
                             const currentStock =
                                 parseNumber(
-                                    excelData[row][4]
+                                    excelData[row][3]
                                 );
 
 
@@ -719,7 +723,7 @@ if (
                                 oldSalesQty;
 
 
-                            excelData[row][4] =
+                            excelData[row][3] =
                                 formatNumber(
                                     newStock
                                 );
@@ -727,11 +731,13 @@ if (
 
                             const stockCell =
                                 document.querySelector(
-                                    `td[data-row="${row}"][data-col="4"]`
+                                    `td[data-row="${row}"][data-col="3"]`
                                 );
 
 
-                            if (stockCell) {
+                            if (
+                                stockCell
+                            ) {
 
                                 stockCell.textContent =
                                     formatNumber(
@@ -765,7 +771,9 @@ if (
                         );
 
 
-                    if (!isNaN(number)) {
+                    if (
+                        !isNaN(number)
+                    ) {
 
                         const formatted =
                             formatNumber(
@@ -787,7 +795,9 @@ if (
                     // 판매수량 변경 → 재고수량 조정
                     // =================================================
 
-                    if (col === 5) {
+                    if (
+                        col === 4
+                    ) {
 
                         const oldSalesQty =
                             parseNumber(
@@ -803,7 +813,7 @@ if (
 
                         const currentStock =
                             parseNumber(
-                                excelData[row][4]
+                                excelData[row][3]
                             );
 
 
@@ -813,7 +823,7 @@ if (
                             newSalesQty;
 
 
-                        excelData[row][4] =
+                        excelData[row][3] =
                             formatNumber(
                                 newStock
                             );
@@ -821,11 +831,13 @@ if (
 
                         const stockCell =
                             document.querySelector(
-                                `td[data-row="${row}"][data-col="4"]`
+                                `td[data-row="${row}"][data-col="3"]`
                             );
 
 
-                        if (stockCell) {
+                        if (
+                            stockCell
+                        ) {
 
                             stockCell.textContent =
                                 formatNumber(
@@ -847,7 +859,9 @@ if (
                     // 단가 변경 → 판매금액 다시 계산
                     // =================================================
 
-                    if (col === 1) {
+                    if (
+                        col === 1
+                    ) {
 
                         updateSalesAmount(
                             row
@@ -861,11 +875,13 @@ if (
                 }
             );
 
+
             tr.appendChild(td);
 
         }
 
-        // 상품 행을 tbody에 추가
+
+        // 상품 행 추가
         tbody.appendChild(tr);
 
     }
@@ -1189,34 +1205,55 @@ function formatNumber(value) {
 function updateSalesAmount(row) {
 
     if (!excelData[row]) {
+
         return;
+
     }
 
+
     const productName =
-        String(excelData[row][0] || "").trim();
+        String(
+            excelData[row][0] || ""
+        ).trim();
+
 
     const priceRaw =
-        String(excelData[row][1] || "").trim();
+        String(
+            excelData[row][1] || ""
+        ).trim();
+
 
     const salesQtyRaw =
-        String(excelData[row][5] || "").trim();
+        String(
+            excelData[row][4] || ""
+        ).trim();
+
 
     const cell =
         document.querySelector(
-            `td[data-row="${row}"][data-col="6"]`
+            `td[data-row="${row}"][data-col="5"]`
         );
 
-    // 제품명이 없으면 판매금액도 빈칸
-    if (productName === "") {
 
-        excelData[row][6] = "";
+    // 제품명이 없으면 판매금액도 빈칸
+    if (
+        productName === ""
+    ) {
+
+        excelData[row][5] =
+            "";
 
         if (cell) {
-            cell.textContent = "";
+
+            cell.textContent =
+                "";
+
         }
 
         return;
+
     }
+
 
     // 단가 또는 판매수량이 비어 있으면 판매금액도 빈칸
     if (
@@ -1224,34 +1261,54 @@ function updateSalesAmount(row) {
         salesQtyRaw === ""
     ) {
 
-        excelData[row][6] = "";
+        excelData[row][5] =
+            "";
 
         if (cell) {
-            cell.textContent = "";
+
+            cell.textContent =
+                "";
+
         }
 
         return;
+
     }
 
+
     const price =
-        parseNumber(priceRaw);
+        parseNumber(
+            priceRaw
+        );
+
 
     const salesQty =
-        parseNumber(salesQtyRaw);
+        parseNumber(
+            salesQtyRaw
+        );
+
 
     const salesAmount =
         price * salesQty;
 
-    const formatted =
-        formatNumber(salesAmount);
 
-    excelData[row][6] =
+    const formatted =
+        formatNumber(
+            salesAmount
+        );
+
+
+    excelData[row][5] =
         formatted;
 
+
     if (cell) {
+
         cell.textContent =
             formatted;
+
     }
+
 }
 
 
@@ -1271,24 +1328,20 @@ function calculateSalesTotal() {
     ) {
 
         if (!excelData[row]) {
+
             continue;
+
         }
 
 
-        const price =
-            parseNumber(
-                excelData[row][1]
-            );
-
-
-        const salesQty =
+        const salesAmount =
             parseNumber(
                 excelData[row][5]
             );
 
 
         total +=
-            price * salesQty;
+            salesAmount;
 
     }
 
@@ -1316,7 +1369,9 @@ function calculateStockTotal() {
     ) {
 
         if (!excelData[row]) {
+
             continue;
+
         }
 
 
@@ -1328,7 +1383,7 @@ function calculateStockTotal() {
 
         const stock =
             parseNumber(
-                excelData[row][4]
+                excelData[row][3]
             );
 
 
@@ -1341,7 +1396,6 @@ function calculateStockTotal() {
     return total;
 
 }
-
 
 // =====================================================
 // 49행 업데이트
