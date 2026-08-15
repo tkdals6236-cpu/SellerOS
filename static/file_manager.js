@@ -860,9 +860,13 @@ if (
 
                 }
             );
-                        tr.appendChild(td);
+
+            tr.appendChild(td);
 
         }
+
+        // 상품 행을 tbody에 추가
+        tbody.appendChild(tr);
 
     }
 
