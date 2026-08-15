@@ -234,6 +234,10 @@ def delete_file(filename):
     if not session.get("admin"):
         return redirect("/")
 
+    # 핵심 엑셀 파일 삭제 방지
+    if filename == "엑셀.xlsx":
+        return redirect("/file")
+
     file_path = os.path.join(
         "uploads",
         "files",
