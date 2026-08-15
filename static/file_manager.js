@@ -552,20 +552,37 @@ function renderExcel() {
                     .includes(col)
             ) {
 
-                const number =
-                    parseNumber(value);
+                // 빈칸은 절대로 0으로 바꾸지 않음
+                const rawValue =
+                    String(value ?? "").trim();
 
                 if (
-                    value !== ""
+                    rawValue === ""
                 ) {
 
-                    value =
-                        formatNumber(
-                            number
-                        );
+                    value = "";
 
-                    excelData[row][col] =
-                        value;
+                    excelData[row][col] = "";
+
+                }
+                else {
+
+                    const number =
+                        parseNumber(rawValue);
+
+                    if (
+                        !isNaN(number)
+                    ) {
+
+                        value =
+                            formatNumber(
+                                number
+                            );
+
+                        excelData[row][col] =
+                            value;
+
+                    }
 
                 }
 
@@ -575,6 +592,7 @@ function renderExcel() {
             td.textContent =
                 value;
 
+       
 
             // =================================================
             // 판매금액은 자동 계산
