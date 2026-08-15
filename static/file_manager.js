@@ -58,6 +58,21 @@ previewCard.insertBefore(
     excel
 );
 
+// =====================================================
+// 입고확정 버튼
+// =====================================================
+
+document
+    .getElementById("confirmIncomingBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            confirmIncomingStock();
+
+        }
+    );
+
 
 // =====================================================
 // 파일 선택
@@ -1503,6 +1518,171 @@ function updateSummaryRow() {
 
 }
 
+// =====================================================
+// 입고확정
+//
+// C열 입고수량을 D열 재고에 반영
+// 반영 후 C열 입고수량은 빈칸으로 초기화
+// =====================================================
+
+function confirmIncomingStock() {
+
+    for (
+        let row = 0;
+        row < 48;
+        row++
+    ) {
+
+        // 데이터가 없는 행은 건너뜀
+        if (
+            !excelData[row]
+        ) {
+            continue;
+        }
+
+
+        // =================================================
+        // 제품명 확인
+        // =================================================
+
+        const productName =
+            String(
+                excelData[row][0] ?? ""
+            ).trim();
+
+        if (
+            productName === ""
+        ) {
+            continue;
+        }
+
+
+        // =================================================
+        // 입고수량
+        // C열 = col 2
+        // =================================================
+
+        const incomingRaw =
+            String(
+                excelData[row][2] ?? ""
+            ).trim();
+
+        // 입고수량이 비어 있으면 건너뜀
+        if (
+            incomingRaw === ""
+        ) {
+            continue;
+        }
+
+
+        const incomingQty =
+            parseNumber(
+                incomingRaw
+            );
+
+        if (
+            isNaN(incomingQty)
+        ) {
+            continue;
+        }
+
+
+        // =================================================
+        // 현재 재고
+        // D열 = col 3
+        // =================================================
+
+        const stockRaw =
+            String(
+                excelData[row][3] ?? ""
+            ).trim();
+
+        const currentStock =
+            stockRaw === ""
+                ? 0
+                : parseNumber(
+                    stockRaw
+                );
+
+        if (
+            isNaN(currentStock)
+        ) {
+            continue;
+        }
+
+
+        // =================================================
+        // 입고수량 → 재고 반영
+        // =================================================
+
+        const newStock =
+            currentStock +
+            incomingQty;
+
+
+        excelData[row][3] =
+            formatNumber(
+                newStock
+            );
+
+
+        // =================================================
+        // 입고수량 초기화
+        // =================================================
+
+        excelData[row][2] =
+            "";
+
+
+        // =================================================
+        // 화면 재고 셀 갱신
+        // =================================================
+
+        const stockCell =
+            document.querySelector(
+                `td[data-row="${row}"][data-col="3"]`
+            );
+
+        if (
+            stockCell
+        ) {
+
+            stockCell.textContent =
+                formatNumber(
+                    newStock
+                );
+
+        }
+
+
+        // =================================================
+        // 화면 입고수량 셀 초기화
+        // =================================================
+
+        const incomingCell =
+            document.querySelector(
+                `td[data-row="${row}"][data-col="2"]`
+            );
+
+        if (
+            incomingCell
+        ) {
+
+            incomingCell.textContent =
+                "";
+
+        }
+
+    }
+
+
+    // =================================================
+    // 합계/재고금액 갱신
+    // =================================================
+
+    updateSummaryRow();
+
+}
 
 // =====================================================
 // 최대 열 개수
