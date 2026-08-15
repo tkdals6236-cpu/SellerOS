@@ -509,29 +509,26 @@ if (
 }
 
 
-            // 숫자 컬럼 처음 표시할 때 콤마
-            if (
-                [1, 2, 3, 4, 5, 6]
-                    .includes(col)
-            ) {
+// 숫자 컬럼 처음 표시할 때 콤마
+if (
+    [1, 2, 3, 4, 5, 6]
+        .includes(col)
+) {
 
-                const number =
-                    parseNumber(value);
+    const number =
+        parseNumber(value);
 
-                if (
-                    value !== "" ||
-                    col === 3
-                ) {
+    if (value !== "") {
 
-                    value =
-                        formatNumber(number);
+        value =
+            formatNumber(number);
 
-                    excelData[row][col] =
-                        value;
+        excelData[row][col] =
+            value;
 
-                }
+    }
 
-            }
+}
 
 
             td.textContent =
@@ -580,37 +577,26 @@ if (
                     excelData[row][col] =
                         td.textContent;
 
+                    // 제품명을 새로 입력하면 입고수량을 0으로 표시
+if (
+    col === 0 &&
+    td.textContent.trim() !== "" &&
+    !excelData[row][3]
+) {
 
-                    // 숫자 컬럼
-                    const numericCols = [
-                        1, 2, 3, 4, 5, 6
-                    ];
+    excelData[row][3] = "0";
+
+    const inputCell =
+        document.querySelector(
+            `td[data-row="${row}"][data-col="3"]`
+        );
+
+    if (inputCell) {
+        inputCell.textContent = "0";
+    }
+}
 
 
-                    if (
-                        numericCols.includes(col)
-                    ) {
-
-                        const number =
-                            parseNumber(
-                                td.textContent
-                            );
-
-                        if (!isNaN(number)) {
-
-                            td.textContent =
-                                formatNumber(
-                                    number
-                                );
-
-                            excelData[row][col] =
-                                formatNumber(
-                                    number
-                                );
-
-                        }
-
-                    }
 
 
                     // 단가 또는 판매수량 변경
@@ -627,8 +613,45 @@ if (
 
                 }
             );
+        // 숫자 입력이 끝났을 때만 콤마 적용
+    td.addEventListener("blur", () => {
 
+        const numericCols = [
+            1, 2, 3, 4, 5, 6
+        ];
 
+        if (!numericCols.includes(col)) {
+            return;
+        }
+
+        const number =
+            parseNumber(td.textContent);
+
+        if (!isNaN(number)) {
+
+            const formatted =
+                formatNumber(number);
+
+            td.textContent =
+                formatted;
+
+            excelData[row][col] =
+                formatted;
+        }
+
+        if (
+            col === 1 ||
+            col === 5
+        ) {
+
+            updateSalesAmount(row);
+
+        }
+
+        updateSummaryRow();
+
+    });
+  
             tr.appendChild(td);
 
         }
