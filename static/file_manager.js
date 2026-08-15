@@ -382,49 +382,148 @@ function renderExcel() {
 
 
     // 컬럼 헤더
-    for (
-        let col = 0;
-        col < columnCount;
-        col++
+for (
+    let col = 0;
+    col < columnCount;
+    col++
+) {
+
+    const th =
+        document.createElement("th");
+
+    th.dataset.col =
+        col;
+
+    th.className =
+        "excel-header";
+
+
+    // =================================================
+    // 헤더 내용 영역
+    // =================================================
+
+    const headerContent =
+        document.createElement("div");
+
+    headerContent.className =
+        "excel-header-content";
+
+
+    // 헤더 이름
+    const headerText =
+        document.createElement("span");
+
+    headerText.textContent =
+        excelHeaders[col] || "";
+
+    headerText.contentEditable =
+        "true";
+
+
+    // 헤더 수정
+    headerText.addEventListener(
+        "input",
+        () => {
+
+            excelHeaders[col] =
+                headerText.textContent;
+
+        }
+    );
+
+
+    headerContent.appendChild(
+        headerText
+    );
+
+
+    // =================================================
+    // 입고확정 버튼
+    // C열 = col 2
+    // =================================================
+
+    if (
+        col === 2
     ) {
 
-        const th =
-            document.createElement("th");
+        const button =
+            document.createElement("button");
 
-        th.textContent =
-            excelHeaders[col] || "";
+        button.type =
+            "button";
 
-        th.contentEditable =
-            "true";
+        button.textContent =
+            "입고확정";
 
-        th.dataset.col =
-            col;
+        button.className =
+            "column-action-btn";
 
-        th.className =
-            "excel-header";
+        button.addEventListener(
+            "click",
+            (event) => {
 
+                event.stopPropagation();
 
-        // 헤더 수정
-        th.addEventListener(
-            "input",
-            () => {
-
-                excelHeaders[col] =
-                    th.textContent;
+                confirmIncomingStock();
 
             }
         );
 
-
-        headerRow.appendChild(th);
+        headerContent.prepend(
+            button
+        );
 
     }
 
 
-    thead.appendChild(headerRow);
+    // =================================================
+    // 정산완료 버튼
+    // E열 = col 4
+    // =================================================
 
-    table.appendChild(thead);
+    if (
+        col === 4
+    ) {
 
+        const button =
+            document.createElement("button");
+
+        button.type =
+            "button";
+
+        button.textContent =
+            "정산완료";
+
+        button.className =
+            "column-action-btn";
+
+        button.addEventListener(
+            "click",
+            (event) => {
+
+                event.stopPropagation();
+
+                completeSettlement();
+
+            }
+        );
+
+        headerContent.prepend(
+            button
+        );
+
+    }
+
+
+    th.appendChild(
+        headerContent
+    );
+
+    headerRow.appendChild(
+        th
+    );
+
+}
 
     // =================================================
     // 데이터
