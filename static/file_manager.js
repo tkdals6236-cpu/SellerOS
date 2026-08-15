@@ -30,7 +30,6 @@ const previewCard = excel.parentElement;
 const excelToolbar = document.createElement("div");
 
 excelToolbar.id = "excelToolbar";
-
 excelToolbar.style.display = "none";
 excelToolbar.style.marginBottom = "10px";
 
@@ -88,9 +87,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         ) {
 
             excelToolbar.style.display = "none";
-
             excel.style.display = "none";
-
             preview.style.display = "block";
 
             preview.src =
@@ -111,9 +108,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         ) {
 
             preview.style.display = "none";
-
             excel.style.display = "block";
-
             excelToolbar.style.display = "block";
 
             currentExcelFile = file;
@@ -138,7 +133,6 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
                 }
 
                 loadExcelData(data);
-
                 renderExcel();
 
             })
@@ -166,24 +160,20 @@ function loadExcelData(data) {
 
     excelData = [];
 
-
-    // 최소 8열
-    const maxCols =
-        Math.max(
-            data.max_col || 0,
-            8
-        );
+    const maxCols = Math.max(
+        data.max_col || 0,
+        8
+    );
 
 
-    // 실제 엑셀 데이터 전부 유지
+    // 실제 데이터 전부 유지
     for (
         let row = 1;
-        row <= data.max_row;
+        row <= (data.max_row || 0);
         row++
     ) {
 
         let rowData = [];
-
 
         for (
             let col = 1;
@@ -197,6 +187,10 @@ function loadExcelData(data) {
 
         }
 
+        // 최소 8열
+        while (rowData.length < 8) {
+            rowData.push("");
+        }
 
         excelData.push(rowData);
 
@@ -207,9 +201,80 @@ function loadExcelData(data) {
     if (excelData.length === 0) {
 
         excelData.push(
-            Array(maxCols).fill("")
+            Array(8).fill("")
         );
 
+    }
+
+
+    // 최소 50행 데이터 배열 확보
+    while (excelData.length < 50) {
+
+        excelData.push(
+            Array(8).fill("")
+        );
+
+    }
+
+
+    // =================================================
+    // 1~48행 상품 데이터 기본값
+    // =================================================
+
+    for (let row = 0; row < 48; row++) {
+
+        if (!excelData[row]) {
+            excelData[row] =
+                Array(8).fill("");
+        }
+
+        while (excelData[row].length < 8) {
+            excelData[row].push("");
+        }
+
+        // 입고수량 기본값 0
+        if (
+            excelData[row][3] === null ||
+            excelData[row][3] === undefined ||
+            excelData[row][3] === ""
+        ) {
+
+            excelData[row][3] = "0";
+
+        }
+
+    }
+
+
+    // =================================================
+    // 49행
+    // =================================================
+
+    if (!excelData[48]) {
+
+        excelData[48] =
+            Array(8).fill("");
+
+    }
+
+    while (excelData[48].length < 8) {
+        excelData[48].push("");
+    }
+
+
+    // =================================================
+    // 50행
+    // =================================================
+
+    if (!excelData[49]) {
+
+        excelData[49] =
+            Array(8).fill("");
+
+    }
+
+    while (excelData[49].length < 8) {
+        excelData[49].push("");
     }
 
 }
@@ -264,7 +329,7 @@ function renderExcel() {
 
 
     const columnCount =
-        getMaxCols();
+        8;
 
 
     // 컬럼 헤더
@@ -277,20 +342,14 @@ function renderExcel() {
         const th =
             document.createElement("th");
 
-
-        // 기본 헤더
         th.textContent =
             excelHeaders[col] || "";
 
-
-        // 헤더 수정 가능
         th.contentEditable =
             "true";
 
-
         th.dataset.col =
             col;
-
 
         th.className =
             "excel-header";
@@ -326,15 +385,8 @@ function renderExcel() {
         document.createElement("tbody");
 
 
-    // 실제 데이터 + 빈 행 10줄
-    const realRows =
-        excelData.length;
-
-    const displayRows =
-        Math.max(
-            realRows,
-            50
-        );
+    // 정확히 50행
+    const displayRows = 50;
 
 
     for (
@@ -354,20 +406,47 @@ function renderExcel() {
         const rowNumber =
             document.createElement("th");
 
-
         rowNumber.textContent =
             row + 1;
 
-
         rowNumber.className =
             "excel-row-number";
-
 
         tr.appendChild(rowNumber);
 
 
         // =================================================
-        // 셀
+        // 49행 / 50행 특수 처리
+        // =================================================
+
+        if (row === 48) {
+
+            renderSummaryRow(
+                tr,
+                row
+            );
+
+            tbody.appendChild(tr);
+
+            continue;
+        }
+
+
+        if (row === 49) {
+
+            renderStockTotalRow(
+                tr,
+                row
+            );
+
+            tbody.appendChild(tr);
+
+            continue;
+        }
+
+
+        // =================================================
+        // 상품 셀
         // =================================================
 
         for (
@@ -379,36 +458,92 @@ function renderExcel() {
             const td =
                 document.createElement("td");
 
-
             td.contentEditable =
                 "true";
-
 
             td.className =
                 "excel-cell";
 
-
             td.dataset.row =
                 row;
-
 
             td.dataset.col =
                 col;
 
 
-            // 실제 데이터가 있으면 표시
+            // =================================================
+            // 값 표시
+            // =================================================
+
+            let value = "";
+
             if (
                 excelData[row] &&
                 excelData[row][col] !== undefined
             ) {
 
-                td.textContent =
+                value =
                     excelData[row][col];
 
-            } else {
+            }
 
-                td.textContent =
-                    "";
+
+            // 입고수량 기본값
+            if (
+                col === 3 &&
+                (
+                    value === null ||
+                    value === undefined ||
+                    value === ""
+                )
+            ) {
+
+                value = "0";
+
+                excelData[row][col] =
+                    "0";
+
+            }
+
+
+            // 숫자 컬럼 처음 표시할 때 콤마
+            if (
+                [1, 2, 3, 4, 5, 6]
+                    .includes(col)
+            ) {
+
+                const number =
+                    parseNumber(value);
+
+                if (
+                    value !== "" ||
+                    col === 3
+                ) {
+
+                    value =
+                        formatNumber(number);
+
+                    excelData[row][col] =
+                        value;
+
+                }
+
+            }
+
+
+            td.textContent =
+                value;
+
+
+            // =================================================
+            // 판매금액은 자동 계산
+            // =================================================
+
+            if (col === 6) {
+
+                updateSalesAmount(
+                    row
+                );
 
             }
 
@@ -421,19 +556,16 @@ function renderExcel() {
                 "input",
                 () => {
 
-                    // 새 행이면 배열 생성
                     if (!excelData[row]) {
 
                         excelData[row] =
-                            Array(columnCount).fill("");
+                            Array(8).fill("");
 
                     }
 
 
-                    // 새 열이 부족하면 확장
                     while (
-                        excelData[row].length <
-                        columnCount
+                        excelData[row].length < 8
                     ) {
 
                         excelData[row].push("");
@@ -441,8 +573,54 @@ function renderExcel() {
                     }
 
 
+                    // 현재 셀 저장
                     excelData[row][col] =
                         td.textContent;
+
+
+                    // 숫자 컬럼
+                    const numericCols = [
+                        1, 2, 3, 4, 5, 6
+                    ];
+
+
+                    if (
+                        numericCols.includes(col)
+                    ) {
+
+                        const number =
+                            parseNumber(
+                                td.textContent
+                            );
+
+                        if (!isNaN(number)) {
+
+                            td.textContent =
+                                formatNumber(
+                                    number
+                                );
+
+                            excelData[row][col] =
+                                formatNumber(
+                                    number
+                                );
+
+                        }
+
+                    }
+
+
+                    // 단가 또는 판매수량 변경
+                    if (
+                        col === 1 ||
+                        col === 5
+                    ) {
+
+                        updateSalesAmount(
+                            row
+                        );
+
+                    }
 
                 }
             );
@@ -464,6 +642,490 @@ function renderExcel() {
 
     excel.appendChild(wrapper);
 
+
+    // 49행 계산 표시
+    updateSummaryRow();
+
+}
+
+
+// =====================================================
+// 49행
+//
+// A = 합계금액
+// B = 전체 판매금액
+// C = 입금액
+// D = 직접 입력
+// E = 잔액
+// F = 합계금액 - 입금액
+// =====================================================
+
+function renderSummaryRow(tr, row) {
+
+    const values = [
+        "합계금액",
+        "",
+        "입금액",
+        "",
+        "잔액",
+        "",
+        "",
+        ""
+    ];
+
+
+    for (
+        let col = 0;
+        col < 8;
+        col++
+    ) {
+
+        const td =
+            document.createElement("td");
+
+        td.dataset.row =
+            row;
+
+        td.dataset.col =
+            col;
+
+
+        // 라벨
+        if (
+            col === 0 ||
+            col === 2 ||
+            col === 4
+        ) {
+
+            td.textContent =
+                values[col];
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-label";
+
+        }
+
+
+        // 합계금액
+        else if (col === 1) {
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-value";
+
+        }
+
+
+        // 입금액
+        else if (col === 3) {
+
+            td.contentEditable =
+                "true";
+
+            td.className =
+                "excel-summary-input";
+
+            td.textContent =
+                excelData[48][3] || "0";
+
+
+            td.addEventListener(
+                "input",
+                () => {
+
+                    const amount =
+                        parseNumber(
+                            td.textContent
+                        );
+
+                    td.textContent =
+                        formatNumber(
+                            amount
+                        );
+
+                    excelData[48][3] =
+                        formatNumber(
+                            amount
+                        );
+
+                    updateSummaryRow();
+
+                }
+            );
+
+        }
+
+
+        // 잔액
+        else if (col === 5) {
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-value";
+
+        }
+
+
+        else {
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-empty";
+
+        }
+
+
+        tr.appendChild(td);
+
+    }
+
+}
+
+
+// =====================================================
+// 50행
+//
+// A = 재고금액
+// B = 단가 × 재고 전체 합계
+// =====================================================
+
+function renderStockTotalRow(tr, row) {
+
+    for (
+        let col = 0;
+        col < 8;
+        col++
+    ) {
+
+        const td =
+            document.createElement("td");
+
+        td.dataset.row =
+            row;
+
+        td.dataset.col =
+            col;
+
+
+        if (col === 0) {
+
+            td.textContent =
+                "재고금액";
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-label";
+
+        }
+
+        else if (col === 1) {
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-value";
+
+            td.textContent =
+                formatNumber(
+                    calculateStockTotal()
+                );
+
+        }
+
+        else {
+
+            td.textContent =
+                "";
+
+            td.contentEditable =
+                "false";
+
+            td.className =
+                "excel-summary-empty";
+
+        }
+
+
+        tr.appendChild(td);
+
+    }
+
+}
+
+
+// =====================================================
+// 숫자 변환
+// =====================================================
+
+function parseNumber(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return 0;
+
+    }
+
+
+    return Number(
+        String(value)
+            .replace(/,/g, "")
+            .trim()
+    );
+
+}
+
+
+// =====================================================
+// 숫자 콤마 표시
+// =====================================================
+
+function formatNumber(value) {
+
+    const number =
+        Number(value);
+
+
+    if (isNaN(number)) {
+
+        return "0";
+
+    }
+
+
+    return number.toLocaleString(
+        "ko-KR"
+    );
+
+}
+
+
+// =====================================================
+// 판매금액 자동 계산
+//
+// 단가 × 판매수량
+// =====================================================
+
+function updateSalesAmount(row) {
+
+    if (!excelData[row]) {
+
+        return;
+
+    }
+
+
+    const price =
+        parseNumber(
+            excelData[row][1]
+        );
+
+
+    const salesQty =
+        parseNumber(
+            excelData[row][5]
+        );
+
+
+    const salesAmount =
+        price * salesQty;
+
+
+    excelData[row][6] =
+        formatNumber(
+            salesAmount
+        );
+
+
+    const cell =
+        document.querySelector(
+            `td[data-row="${row}"][data-col="6"]`
+        );
+
+
+    if (cell) {
+
+        cell.textContent =
+            formatNumber(
+                salesAmount
+            );
+
+    }
+
+}
+
+
+// =====================================================
+// 전체 판매금액
+// =====================================================
+
+function calculateSalesTotal() {
+
+    let total = 0;
+
+
+    for (
+        let row = 0;
+        row < 48;
+        row++
+    ) {
+
+        if (!excelData[row]) {
+            continue;
+        }
+
+
+        const price =
+            parseNumber(
+                excelData[row][1]
+            );
+
+
+        const salesQty =
+            parseNumber(
+                excelData[row][5]
+            );
+
+
+        total +=
+            price * salesQty;
+
+    }
+
+
+    return total;
+
+}
+
+
+// =====================================================
+// 전체 재고금액
+//
+// 단가 × 재고
+// =====================================================
+
+function calculateStockTotal() {
+
+    let total = 0;
+
+
+    for (
+        let row = 0;
+        row < 48;
+        row++
+    ) {
+
+        if (!excelData[row]) {
+            continue;
+        }
+
+
+        const price =
+            parseNumber(
+                excelData[row][1]
+            );
+
+
+        const stock =
+            parseNumber(
+                excelData[row][4]
+            );
+
+
+        total +=
+            price * stock;
+
+    }
+
+
+    return total;
+
+}
+
+
+// =====================================================
+// 49행 업데이트
+// =====================================================
+
+function updateSummaryRow() {
+
+    const totalSales =
+        calculateSalesTotal();
+
+
+    const deposit =
+        parseNumber(
+            excelData[48]?.[3]
+        );
+
+
+    const balance =
+        totalSales - deposit;
+
+
+    const totalCell =
+        document.querySelector(
+            'td[data-row="48"][data-col="1"]'
+        );
+
+
+    const balanceCell =
+        document.querySelector(
+            'td[data-row="48"][data-col="5"]'
+        );
+
+
+    if (totalCell) {
+
+        totalCell.textContent =
+            formatNumber(
+                totalSales
+            );
+
+    }
+
+
+    if (balanceCell) {
+
+        balanceCell.textContent =
+            formatNumber(
+                balance
+            );
+
+    }
+
+
+    // 50행 재고금액
+    const stockCell =
+        document.querySelector(
+            'td[data-row="49"][data-col="1"]'
+        );
+
+
+    if (stockCell) {
+
+        stockCell.textContent =
+            formatNumber(
+                calculateStockTotal()
+            );
+
+    }
+
 }
 
 
@@ -473,26 +1135,7 @@ function renderExcel() {
 
 function getMaxCols() {
 
-    let max = 8;
-
-
-    for (
-        const row of excelData
-    ) {
-
-        if (
-            row &&
-            row.length > max
-        ) {
-
-            max = row.length;
-
-        }
-
-    }
-
-
-    return max;
+    return 8;
 
 }
 
@@ -518,6 +1161,10 @@ document
                 document.getElementById(
                     "saveExcelBtn"
                 );
+
+
+            // 49행 최신 입금액 반영
+            updateSummaryRow();
 
 
             saveButton.disabled =
@@ -562,12 +1209,47 @@ document
                         "엑셀 파일이 저장되었습니다."
                     );
 
-                } else {
 
-                    alert(
-                        data.error ||
-                        "저장에 실패했습니다."
+                    // 서버에서 저장된 최신 데이터 다시 불러오기
+                    return fetch(
+                        "/excel_data/" +
+                        encodeURIComponent(
+                            currentExcelFile
+                        )
                     );
+
+                }
+
+
+                throw new Error(
+                    data.error ||
+                    "저장에 실패했습니다."
+                );
+
+            })
+            .then(res => {
+
+                if (!res) {
+                    return;
+                }
+
+                return res.json();
+
+            })
+            .then(data => {
+
+                if (!data) {
+                    return;
+                }
+
+
+                if (!data.error) {
+
+                    loadExcelData(
+                        data
+                    );
+
+                    renderExcel();
 
                 }
 
@@ -577,6 +1259,7 @@ document
                 console.error(err);
 
                 alert(
+                    err.message ||
                     "저장 중 오류가 발생했습니다."
                 );
 
