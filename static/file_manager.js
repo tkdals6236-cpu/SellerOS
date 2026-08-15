@@ -713,58 +713,68 @@ function renderExcel() {
                             "";
 
 
-                        // 판매수량을 지운 경우
-                        if (
-                            col === 4
-                        ) {
+                       // 판매수량을 지운 경우
+if (
+    col === 4
+) {
 
-                            const oldSalesQty =
-                                parseNumber(
-                                    td.dataset.oldSalesQty || ""
-                                );
+    const oldSalesRaw =
+        String(
+            td.dataset.oldSalesQty || ""
+        ).trim();
 
+    // 기존 판매수량이 실제로 있었던 경우에만
+    // 재고를 복구한다.
+    if (
+        oldSalesRaw !== ""
+    ) {
 
-                            const currentStock =
-                                parseNumber(
-                                    excelData[row][3]
-                                );
+        const oldSalesQty =
+            parseNumber(
+                oldSalesRaw
+            );
 
+        const stockRaw =
+            String(
+                excelData[row][3] ?? ""
+            ).trim();
 
-                            const newStock =
-                                currentStock +
-                                oldSalesQty;
+        const currentStock =
+            stockRaw === ""
+                ? 0
+                : parseNumber(stockRaw);
 
+        const newStock =
+            currentStock +
+            oldSalesQty;
 
-                            excelData[row][3] =
-                                formatNumber(
-                                    newStock
-                                );
+        excelData[row][3] =
+            formatNumber(
+                newStock
+            );
 
+        const stockCell =
+            document.querySelector(
+                `td[data-row="${row}"][data-col="3"]`
+            );
 
-                            const stockCell =
-                                document.querySelector(
-                                    `td[data-row="${row}"][data-col="3"]`
-                                );
+        if (
+            stockCell
+        ) {
 
+            stockCell.textContent =
+                formatNumber(
+                    newStock
+                );
 
-                            if (
-                                stockCell
-                            ) {
+        }
 
-                                stockCell.textContent =
-                                    formatNumber(
-                                        newStock
-                                    );
+    }
 
-                            }
-
-
-                            updateSalesAmount(
-                                row
-                            );
-
-                        }
-
+    updateSalesAmount(
+        row
+    );
+}
 
                         updateSummaryRow();
 
