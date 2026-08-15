@@ -37,6 +37,20 @@ excelToolbar.innerHTML = `
     <button id="saveExcelBtn">
         💾 수정 내용 저장
     </button>
+
+    <button
+        id="confirmIncomingBtn"
+        style="margin-left: 8px;"
+    >
+        입고확정
+    </button>
+
+    <button
+        id="completeSettlementBtn"
+        style="margin-left: 8px;"
+    >
+        정산완료
+    </button>
 `;
 
 previewCard.insertBefore(
