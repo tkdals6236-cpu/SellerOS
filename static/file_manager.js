@@ -797,7 +797,7 @@ function renderSummaryRow(tr, row) {
                 "excel-summary-input";
 
             td.textContent =
-                excelData[48][3] || "0";
+                excelData[48][3] || "";
 
 
             td.addEventListener(
