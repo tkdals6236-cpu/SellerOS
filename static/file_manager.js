@@ -376,154 +376,164 @@ function renderExcel() {
 
     headerRow.appendChild(corner);
 
-
-    const columnCount =
+        const columnCount =
         8;
 
 
+    // =================================================
     // 컬럼 헤더
-for (
-    let col = 0;
-    col < columnCount;
-    col++
-) {
-
-    const th =
-        document.createElement("th");
-
-    th.dataset.col =
-        col;
-
-    th.className =
-        "excel-header";
-
-
-    // =================================================
-    // 헤더 내용 영역
     // =================================================
 
-    const headerContent =
-        document.createElement("div");
+    for (
+        let col = 0;
+        col < columnCount;
+        col++
+    ) {
 
-    headerContent.className =
-        "excel-header-content";
+        const th =
+            document.createElement("th");
 
+        th.dataset.col =
+            col;
 
-    // 헤더 이름
-    const headerText =
-        document.createElement("span");
-
-    headerText.textContent =
-        excelHeaders[col] || "";
-
-    headerText.contentEditable =
-        "true";
+        th.className =
+            "excel-header";
 
 
-    // 헤더 수정
-    headerText.addEventListener(
-        "input",
-        () => {
+        // =================================================
+        // 입고확정 버튼
+        // C열 = col 2
+        // =================================================
 
-            excelHeaders[col] =
-                headerText.textContent;
+        if (
+            col === 2
+        ) {
+
+            const button =
+                document.createElement("button");
+
+            button.type =
+                "button";
+
+            button.textContent =
+                "입고확정";
+
+            button.className =
+                "column-action-btn";
+
+            button.style.display =
+                "block";
+
+            button.style.margin =
+                "0 auto 3px auto";
+
+            button.addEventListener(
+                "click",
+                (event) => {
+
+                    event.stopPropagation();
+
+                    confirmIncomingStock();
+
+                }
+            );
+
+            th.appendChild(
+                button
+            );
 
         }
-    );
 
 
-    headerContent.appendChild(
-        headerText
-    );
+        // =================================================
+        // 정산완료 버튼
+        // E열 = col 4
+        // =================================================
+
+        if (
+            col === 4
+        ) {
+
+            const button =
+                document.createElement("button");
+
+            button.type =
+                "button";
+
+            button.textContent =
+                "정산완료";
+
+            button.className =
+                "column-action-btn";
+
+            button.style.display =
+                "block";
+
+            button.style.margin =
+                "0 auto 3px auto";
+
+            button.addEventListener(
+                "click",
+                (event) => {
+
+                    event.stopPropagation();
+
+                    completeSettlement();
+
+                }
+            );
+
+            th.appendChild(
+                button
+            );
+
+        }
 
 
-    // =================================================
-    // 입고확정 버튼
-    // C열 = col 2
-    // =================================================
+        // =================================================
+        // 헤더 이름
+        // =================================================
 
-    if (
-        col === 2
-    ) {
+        const headerText =
+            document.createElement("span");
 
-        const button =
-            document.createElement("button");
+        headerText.textContent =
+            excelHeaders[col] || "";
 
-        button.type =
-            "button";
+        headerText.contentEditable =
+            "true";
 
-        button.textContent =
-            "입고확정";
-
-        button.className =
-            "column-action-btn";
-
-        button.addEventListener(
-            "click",
-            (event) => {
-
-                event.stopPropagation();
-
-                confirmIncomingStock();
-
-            }
-        );
-
-        headerContent.prepend(
-            button
-        );
-
-    }
+        headerText.style.display =
+            "block";
 
 
-    // =================================================
-    // 정산완료 버튼
-    // E열 = col 4
-    // =================================================
+        // 헤더 수정
+        headerText.addEventListener(
+            "input",
+            () => {
 
-    if (
-        col === 4
-    ) {
-
-        const button =
-            document.createElement("button");
-
-        button.type =
-            "button";
-
-        button.textContent =
-            "정산완료";
-
-        button.className =
-            "column-action-btn";
-
-        button.addEventListener(
-            "click",
-            (event) => {
-
-                event.stopPropagation();
-
-                completeSettlement();
+                excelHeaders[col] =
+                    headerText.textContent;
 
             }
         );
 
-        headerContent.prepend(
-            button
+
+        th.appendChild(
+            headerText
+        );
+
+
+        // =================================================
+        // 헤더 행에 추가
+        // =================================================
+
+        headerRow.appendChild(
+            th
         );
 
     }
-
-
-    th.appendChild(
-        headerContent
-    );
-
-    headerRow.appendChild(
-        th
-    );
-
-}
+    
 
     // =================================================
     // 데이터
