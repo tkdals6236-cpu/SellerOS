@@ -790,28 +790,47 @@ function renderSummaryRow(tr, row) {
 
 
             td.addEventListener(
-                "input",
-                () => {
+    "input",
+    () => {
 
-                    const amount =
-                        parseNumber(
-                            td.textContent
-                        );
+        // 입력 중에는 값을 그대로 저장
+        // 커서가 튀지 않도록 즉시 콤마 처리하지 않음
+        excelData[48][3] =
+            td.textContent;
 
-                    td.textContent =
-                        formatNumber(
-                            amount
-                        );
+        // 입금액 입력 중에는 합계/잔액만 갱신
+        updateSummaryRow();
 
-                    excelData[48][3] =
-                        formatNumber(
-                            amount
-                        );
+    }
+);
 
-                    updateSummaryRow();
 
-                }
+// 입력이 끝났을 때만 콤마 적용
+td.addEventListener(
+    "blur",
+    () => {
+
+        const amount =
+            parseNumber(
+                td.textContent
             );
+
+        if (!isNaN(amount)) {
+
+            const formatted =
+                formatNumber(amount);
+
+            td.textContent =
+                formatted;
+
+            excelData[48][3] =
+                formatted;
+        }
+
+        updateSummaryRow();
+
+    }
+);
 
         }
 
