@@ -334,7 +334,7 @@ def save_excel():
 
     try:
 
-        data = request.get_json()
+        data = request.get_json() or {}
 
         filename = os.path.basename(
             data.get("filename", "")
@@ -363,31 +363,327 @@ def save_excel():
                 "error": "현재 XLSX 파일만 수정할 수 있습니다."
             }), 400
 
+
+        # =================================================
+        # 숫자 변환
+        # =================================================
+
+        def to_number(value):
+
+            if value is None:
+                return 0
+
+            if isinstance(value, (int, float)):
+                return value
+
+            text = str(value).strip()
+
+            if not text:
+                return 0
+
+            text = text.replace(",", "")
+
+            try:
+                number = float(text)
+
+                if number.is_integer():
+                    return int(number)
+
+                return number
+
+            except (ValueError, TypeError):
+
+                return 0
+
+
+        # =================================================
+        # 금액 표시용 콤마
+        # =================================================
+
+        def format_number(value):
+
+            number = to_number(value)
+
+            return f"{number:,}"
+
+
+        # =================================================
         # 기존 엑셀 열기
+        # =================================================
+
         workbook = openpyxl.load_workbook(
-            file_path
+            file_path,
+            data_only=False
         )
 
         sheet = workbook.active
 
-        # 기존 데이터 전체 삭제
+
+        # =================================================
+        # 화면 데이터 정리
+        #
+        # 0 제품명
+        # 1 단가
+        # 2 예비입고
+        # 3 입고수량
+        # 4 재고
+        # 5 판매수량
+        # 6 판매금액
+        # 7 비고
+        # =================================================
+
+        clean_rows = []
+
+
+        # 최대 48행까지만 상품 데이터로 사용
+        product_rows = rows[:48]
+
+
+        for row in product_rows:
+
+            # None 행 방지
+            if row is None:
+                row = []
+
+            # 리스트가 아니면 빈 행
+            if not isinstance(row, (list, tuple)):
+                row = []
+
+            row = list(row)
+
+
+            # 최소 8열 확보
+            while len(row) < 8:
+                row.append("")
+
+
+            # ---------------------------------------------
+            # 값 읽기
+            # ---------------------------------------------
+
+            product_name = (
+                str(row[0]).strip()
+                if row[0] is not None
+                else ""
+            )
+
+            price = to_number(row[1])
+            reserve_in = to_number(row[2])
+            incoming = to_number(row[3])
+            stock = to_number(row[4])
+            sales_qty = to_number(row[5])
+
+
+            # ---------------------------------------------
+            # 입고수량 → 같은 행 재고에만 합산
+            # ---------------------------------------------
+
+            stock = stock + incoming
+
+
+            # ---------------------------------------------
+            # 판매금액 자동 계산
+            # 단가 × 판매수량
+            # ---------------------------------------------
+
+            sales_amount = price * sales_qty
+
+
+            # ---------------------------------------------
+            # 저장용 행
+            # ---------------------------------------------
+
+            clean_row = [
+                product_name,
+                price,
+                reserve_in,
+                0,                  # 입고수량은 저장 후 0
+                stock,
+                sales_qty,
+                sales_amount,
+                row[7] if row[7] is not None else ""
+            ]
+
+
+            clean_rows.append(clean_row)
+
+
+        # =================================================
+        # 49행 계산
+        #
+        # A49 = 합계금액
+        # B49 = 전체 판매금액
+        # C49 = 입금액
+        # D49 = 직접 입력
+        # E49 = 잔액
+        # F49 = 합계금액 - 입금액
+        # =================================================
+
+        # 기존 화면에서 입력한 입금액 가져오기
+        deposit_amount = 0
+
+        if len(rows) >= 49:
+
+            row49 = rows[48]
+
+            if isinstance(row49, (list, tuple)):
+
+                if len(row49) > 3:
+
+                    deposit_amount = to_number(
+                        row49[3]
+                    )
+
+
+        # 전체 판매금액
+        total_sales_amount = sum(
+            to_number(row[6])
+            for row in clean_rows
+        )
+
+
+        # 잔액
+        balance = (
+            total_sales_amount -
+            deposit_amount
+        )
+
+
+        summary_row = [
+            "합계금액",
+            total_sales_amount,
+            "",
+            deposit_amount,
+            "잔액",
+            balance,
+            "",
+            ""
+        ]
+
+
+        # =================================================
+        # 50행
+        #
+        # A50 = 재고금액
+        # B50 = 단가 × 재고 전체 합계
+        # =================================================
+
+        total_stock_amount = sum(
+            to_number(row[1]) *
+            to_number(row[4])
+            for row in clean_rows
+        )
+
+
+        stock_total_row = [
+            "재고금액",
+            total_stock_amount,
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
+
+
+        # =================================================
+        # 기존 엑셀 전체 삭제
+        # =================================================
+
         if sheet.max_row > 0:
+
             sheet.delete_rows(
                 1,
                 sheet.max_row
             )
 
-        # 수정된 데이터 다시 입력
-        for row in rows:
+
+        # =================================================
+        # 1~48행 상품 저장
+        # =================================================
+
+        for row in clean_rows:
 
             sheet.append(row)
 
+
+        # =================================================
+        # 49행 저장
+        # =================================================
+
+        sheet.append(summary_row)
+
+
+        # =================================================
+        # 50행 저장
+        # =================================================
+
+        sheet.append(stock_total_row)
+
+
+        # =================================================
+        # 숫자 셀에 숫자 형식 적용
+        # =================================================
+
+        for row_num in range(
+            1,
+            sheet.max_row + 1
+        ):
+
+            # 단가
+            sheet.cell(
+                row=row_num,
+                column=2
+            ).number_format = '#,##0'
+
+
+            # 예비입고
+            sheet.cell(
+                row=row_num,
+                column=3
+            ).number_format = '#,##0'
+
+
+            # 입고수량
+            sheet.cell(
+                row=row_num,
+                column=4
+            ).number_format = '#,##0'
+
+
+            # 재고
+            sheet.cell(
+                row=row_num,
+                column=5
+            ).number_format = '#,##0'
+
+
+            # 판매수량
+            sheet.cell(
+                row=row_num,
+                column=6
+            ).number_format = '#,##0'
+
+
+            # 판매금액
+            sheet.cell(
+                row=row_num,
+                column=7
+            ).number_format = '#,##0'
+
+
+        # =================================================
         # 저장
+        # =================================================
+
         workbook.save(file_path)
+
 
         return jsonify({
             "success": True
         })
+
 
     except Exception as e:
 
