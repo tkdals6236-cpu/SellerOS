@@ -158,7 +158,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
             excelToolbar.style.display = "none";
             excel.style.display = "none";
             preview.style.display = "block";
-            txtToolbar.style.display = "none";
+            
 
             preview.src =
                 "/uploads/files/" +
