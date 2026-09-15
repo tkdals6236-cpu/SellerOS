@@ -32,7 +32,6 @@ const excelToolbar = document.createElement("div");
 
 excelToolbar.id = "excelToolbar";
 excelToolbar.style.display = "none";
-txtToolbar.style.display = "none";
 excelToolbar.style.marginBottom = "10px";
 
 excelToolbar.innerHTML = `
