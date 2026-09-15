@@ -2137,3 +2137,95 @@ document
 
         }
     );
+
+// =====================================================
+// TXT 저장
+// =====================================================
+
+document
+    .getElementById("saveTxtBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (!currentTxtFile) {
+                return;
+            }
+
+            const textEditor =
+                document.getElementById(
+                    "txtEditor"
+                );
+
+            if (!textEditor) {
+                return;
+            }
+
+            const saveButton =
+                document.getElementById(
+                    "saveTxtBtn"
+                );
+
+            saveButton.disabled =
+                true;
+
+            saveButton.textContent =
+                "저장 중...";
+
+            fetch(
+                "/save_txt",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        filename:
+                            currentTxtFile,
+
+                        content:
+                            textEditor.value
+                    })
+                }
+            )
+            .then(res => res.json())
+            .then(data => {
+
+                if (!data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "저장에 실패했습니다."
+                    );
+                }
+
+                alert(
+                    "TXT 파일이 저장되었습니다."
+                );
+
+            })
+            .catch(err => {
+
+                console.error(err);
+
+                alert(
+                    err.message ||
+                    "TXT 저장 중 오류가 발생했습니다."
+                );
+
+            })
+            .finally(() => {
+
+                saveButton.disabled =
+                    false;
+
+                saveButton.textContent =
+                    "💾 TXT 저장";
+
+            });
+
+        }
+    );
