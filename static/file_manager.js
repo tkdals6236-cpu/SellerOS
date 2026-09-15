@@ -144,9 +144,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         const file = btn.dataset.file;
         const ext = file.split(".").pop().toLowerCase();
 
-        // 기본값: TXT 저장 버튼 숨김
-        txtToolbar.style.display = "none";
-
+       
 
         // =================================================
         // 이미지
@@ -160,6 +158,7 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
             excelToolbar.style.display = "none";
             excel.style.display = "none";
             preview.style.display = "block";
+            txtToolbar.style.display = "none";
 
             preview.src =
                 "/uploads/files/" +
