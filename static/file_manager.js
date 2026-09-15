@@ -32,6 +32,7 @@ const excelToolbar = document.createElement("div");
 
 excelToolbar.id = "excelToolbar";
 excelToolbar.style.display = "none";
+txtToolbar.style.display = "none";
 excelToolbar.style.marginBottom = "10px";
 
 excelToolbar.innerHTML = `
@@ -280,6 +281,7 @@ if (ext === "txt") {
             preview.style.display = "none";
             excel.style.display = "block";
             excelToolbar.style.display = "block";
+            txtToolbar.style.display = "none";
 
             currentExcelFile = file;
 
