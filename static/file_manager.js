@@ -3,6 +3,7 @@ const excel = document.getElementById("excelPreview");
 
 let currentExcelFile = null;
 let excelData = [];
+let currentTxtFile = null;
 
 
 // =====================================================
