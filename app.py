@@ -750,6 +750,73 @@ def save_excel():
         return jsonify({
             "error": str(e)
         }), 500
+# =====================================================
+# TXT 저장
+# =====================================================
+
+@app.route("/save_txt", methods=["POST"])
+def save_txt():
+
+    if not session.get("admin"):
+        return jsonify({
+            "error": "unauthorized"
+        }), 401
+
+    try:
+
+        data = request.get_json() or {}
+
+        filename = os.path.basename(
+            data.get("filename", "")
+        )
+
+        content = data.get("content", "")
+
+        if not filename:
+            return jsonify({
+                "error": "파일명이 없습니다."
+            }), 400
+
+        if not filename.lower().endswith(".txt"):
+            return jsonify({
+                "error": "TXT 파일만 수정할 수 있습니다."
+            }), 400
+
+        file_path = os.path.join(
+            "uploads",
+            "files",
+            filename
+        )
+
+        if not os.path.exists(file_path):
+            return jsonify({
+                "error": "파일을 찾을 수 없습니다."
+            }), 404
+
+        # UTF-8로 기존 TXT 파일에 덮어쓰기
+        with open(
+            file_path,
+            "w",
+            encoding="utf-8",
+            newline=""
+        ) as f:
+
+            f.write(str(content))
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        print(
+            "TXT 저장 오류:",
+            e
+        )
+
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 @app.route("/preview/<path:filename>")
 def preview(filename):
