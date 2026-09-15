@@ -146,7 +146,81 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
         // =================================================
         // 엑셀
         // =================================================
+// =================================================
+// TXT
+// =================================================
 
+if (ext === "txt") {
+
+    preview.style.display = "none";
+    excel.style.display = "block";
+    excelToolbar.style.display = "none";
+
+    currentExcelFile = null;
+
+    excel.innerHTML =
+        "텍스트 파일 불러오는 중...";
+
+    fetch(
+        "/uploads/files/" +
+        encodeURIComponent(file)
+    )
+    .then(res => {
+
+        if (!res.ok) {
+            throw new Error(
+                "TXT 파일을 불러오지 못했습니다."
+            );
+        }
+
+        return res.text();
+
+    })
+    .then(data => {
+
+        const textPreview =
+            document.createElement("pre");
+
+        textPreview.style.whiteSpace =
+            "pre-wrap";
+
+        textPreview.style.wordBreak =
+            "break-word";
+
+        textPreview.style.margin =
+            "0";
+
+        textPreview.style.padding =
+            "15px";
+
+        textPreview.style.textAlign =
+            "left";
+
+        textPreview.style.background =
+            "#fff";
+
+        textPreview.textContent =
+            data;
+
+        excel.innerHTML = "";
+
+        excel.appendChild(
+            textPreview
+        );
+
+    })
+    .catch(err => {
+
+        console.error(err);
+
+        excel.innerHTML =
+            err.message ||
+            "TXT 파일을 불러오지 못했습니다.";
+
+    });
+
+    return;
+}
         if (
             ["xlsx", "xls", "csv"]
                 .includes(ext)
