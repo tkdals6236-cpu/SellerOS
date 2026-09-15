@@ -60,6 +60,27 @@ previewCard.insertBefore(
 );
 
 // =====================================================
+// TXT 저장 버튼
+// =====================================================
+
+const txtToolbar = document.createElement("div");
+
+txtToolbar.id = "txtToolbar";
+txtToolbar.style.display = "none";
+txtToolbar.style.marginBottom = "10px";
+
+txtToolbar.innerHTML = `
+    <button id="saveTxtBtn">
+        💾 TXT 저장
+    </button>
+`;
+
+previewCard.insertBefore(
+    txtToolbar,
+    excel
+);
+
+// =====================================================
 // 입고확정 버튼
 // =====================================================
 
@@ -151,13 +172,20 @@ document.querySelectorAll(".preview-btn").forEach(btn => {
 // TXT
 // =================================================
 
+// =================================================
+// TXT
+// =================================================
+
 if (ext === "txt") {
 
     preview.style.display = "none";
     excel.style.display = "block";
+
     excelToolbar.style.display = "none";
+    txtToolbar.style.display = "block";
 
     currentExcelFile = null;
+    currentTxtFile = file;
 
     excel.innerHTML =
         "텍스트 파일 불러오는 중...";
@@ -179,34 +207,56 @@ if (ext === "txt") {
     })
     .then(data => {
 
-        const textPreview =
-            document.createElement("pre");
+        // =================================================
+        // TXT 편집 영역
+        // =================================================
 
-        textPreview.style.whiteSpace =
-            "pre-wrap";
+        const textEditor =
+            document.createElement("textarea");
 
-        textPreview.style.wordBreak =
-            "break-word";
+        textEditor.id =
+            "txtEditor";
 
-        textPreview.style.margin =
-            "0";
+        textEditor.value =
+            data;
 
-        textPreview.style.padding =
+        textEditor.style.width =
+            "100%";
+
+        textEditor.style.minHeight =
+            "600px";
+
+        textEditor.style.boxSizing =
+            "border-box";
+
+        textEditor.style.padding =
             "15px";
 
-        textPreview.style.textAlign =
-            "left";
+        textEditor.style.border =
+            "1px solid #ddd";
 
-        textPreview.style.background =
-            "#fff";
+        textEditor.style.borderRadius =
+            "6px";
 
-        textPreview.textContent =
-            data;
+        textEditor.style.fontSize =
+            "14px";
+
+        textEditor.style.lineHeight =
+            "1.6";
+
+        textEditor.style.fontFamily =
+            "monospace";
+
+        textEditor.style.resize =
+            "vertical";
+
+        textEditor.style.whiteSpace =
+            "pre";
 
         excel.innerHTML = "";
 
         excel.appendChild(
-            textPreview
+            textEditor
         );
 
     })
